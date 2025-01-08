@@ -18,7 +18,7 @@ package
       
       private static const MAX_CRAFTABLE:uint = 255;
       
-      public static const VERSION:String = "1.6.1";
+      public static const VERSION:String = "1.6.2";
       
       public static const MOD_NAME:String = "ImprovedWorkbench";
       
@@ -64,6 +64,8 @@ package
       private var isUIinit:Boolean = false;
       
       private var inventoryCounts:*;
+      
+      private var ExamineMenuMode:String = "";
       
       public function ImprovedWorkbench(examineMenu:Object)
       {
@@ -225,12 +227,13 @@ package
          QuantityMenu.zel_ImprovedMenu = ImprovedQuantityMenu;
          if(this.EnableLegendaryModTracking)
          {
-            this.loadExistingItemsmodIni();
             BSUIDataManager.Subscribe("ExamineMenuMode",function(event:FromClientDataEvent):*
             {
+               ExamineMenuMode = event.data.mode;
                if(event.data.mode == "crafting")
                {
-                  setTimeout(writeLegendaryModsToFile,75);
+                  setTimeout(loadExistingItemsmodIni,25);
+                  setTimeout(writeLegendaryModsToFile,100);
                }
             });
          }
@@ -502,6 +505,11 @@ package
       
       private function writeLegendaryModsToFile() : *
       {
+         if(ExamineMenuMode != "crafting")
+         {
+            this._examineMenu.displayError("Examine menu mode not crafting (" + ExamineMenuMode + "), saving Legendary mods cancelled!");
+            return;
+         }
          if(this.hasScannedLegendaryMods)
          {
             return;
@@ -716,6 +724,11 @@ package
          var loaderComplete:Function;
          var url:URLRequest;
          var loader:URLLoader;
+         if(ExamineMenuMode != "crafting")
+         {
+            _examineMenu.displayError("loadExistingItemsmodIni cancelled!");
+            return;
+         }
          if(_legendaryModsFromIni != null)
          {
             return;
