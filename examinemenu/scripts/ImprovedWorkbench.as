@@ -7,6 +7,7 @@ package
    import com.adobe.serialization.json.*;
    import com.brokenfunction.json.JsonDecoderAsync;
    import flash.events.*;
+   import flash.filters.*;
    import flash.net.*;
    import flash.text.*;
    import flash.utils.*;
@@ -18,7 +19,7 @@ package
       
       private static const MAX_CRAFTABLE:uint = 255;
       
-      public static const VERSION:String = "1.6.2";
+      public static const VERSION:String = "1.6.3";
       
       public static const MOD_NAME:String = "ImprovedWorkbench";
       
@@ -67,12 +68,25 @@ package
       
       private var ExamineMenuMode:String = "";
       
+      private var PerksUIData:*;
+      
+      private var LegendaryPerksMenuData:*;
+      
+      private var perkCards_tf:TextField;
+      
+      private var perkCardsData:*;
+      
       public function ImprovedWorkbench(examineMenu:Object)
       {
+         this.perkCardsData = {};
          this.inventoryCounts = {};
          super();
          this._examineMenu = examineMenu;
          loadConfig();
+         this.PerksUIData = BSUIDataManager.GetDataFromClient("PerksUIData").data;
+         this.LegendaryPerksMenuData = BSUIDataManager.GetDataFromClient("LegendaryPerksMenuData").data;
+         BSUIDataManager.Subscribe("PerksUIData",initPerkCardsConfig);
+         BSUIDataManager.Subscribe("LegendaryPerksMenuData",initPerkCardsConfig);
       }
       
       public static function ShowMessage(param1:String) : void
@@ -202,6 +216,7 @@ package
                {
                   LEGENDARY_LOAD_FILE_LOCATION = _config.legendaryModTrackingLoadFileDirectory;
                }
+               initPerkCardsConfig(null);
                _examineMenu.displayError(MOD_NAME + " " + VERSION + " Config file loaded");
                init();
                _examineMenu.displayError("Initialized");
@@ -230,10 +245,14 @@ package
             BSUIDataManager.Subscribe("ExamineMenuMode",function(event:FromClientDataEvent):*
             {
                ExamineMenuMode = event.data.mode;
-               if(event.data.mode == "crafting")
+               if(ExamineMenuMode == "crafting")
                {
                   setTimeout(loadExistingItemsmodIni,25);
                   setTimeout(writeLegendaryModsToFile,100);
+               }
+               if(perkCards_tf != null)
+               {
+                  perkCards_tf.visible = ExamineMenuMode != "inspect";
                }
             });
          }
@@ -244,6 +263,189 @@ package
                mapInventory(event);
             });
          }
+      }
+      
+      private function initPerkCardsTextField() : void
+      {
+         var cfg:* = _config.perkCardsConfig.textField || {};
+         if(cfg.x == null || isNaN(cfg.x))
+         {
+            cfg.x = 0;
+         }
+         if(cfg.y == null || isNaN(cfg.y))
+         {
+            cfg.y = 400;
+         }
+         if(cfg.textSize == null || isNaN(cfg.textSize))
+         {
+            cfg.textSize = 20;
+         }
+         if(cfg.textFont == null)
+         {
+            cfg.textFont = "$MAIN_Font";
+         }
+         if(cfg.textAlign == null)
+         {
+            cfg.textAlign = "left";
+         }
+         cfg.textColor = cfg.textColor == null ? (cfg.textColor = 16777179) : int(cfg.textColor);
+         this.perkCards_tf = new TextField();
+         this.perkCards_tf.x = cfg.x;
+         this.perkCards_tf.y = cfg.y;
+         this.perkCards_tf.width = 500;
+         this.perkCards_tf.height = 500;
+         this.perkCards_tf.autoSize = TextFieldAutoSize.LEFT;
+         this.perkCards_tf.multiline = true;
+         this.perkCards_tf.selectable = false;
+         this.perkCards_tf.mouseWheelEnabled = false;
+         this.perkCards_tf.mouseEnabled = false;
+         this.perkCards_tf.visible = false;
+         var font:TextFormat = new TextFormat(cfg.textFont,cfg.textSize,cfg.textColor);
+         font.align = cfg.textAlign;
+         this.perkCards_tf.defaultTextFormat = font;
+         this.perkCards_tf.setTextFormat(font);
+         this.perkCards_tf.filters = Boolean(cfg.textShadow) ? [new DropShadowFilter(2,45,0,1,1,1,1,BitmapFilterQuality.HIGH)] : [];
+         GlobalFunc.SetText(this.perkCards_tf,"",false);
+         this._examineMenu.addChild(this.perkCards_tf);
+      }
+      
+      private function initPerkCardsConfig(event:*) : void
+      {
+         if(_config == null || _config.perkCardsConfig == null || !_config.perkCardsConfig.enabled)
+         {
+            return;
+         }
+         if(PerksUIData == null || PerksUIData.perkCardDataA == null || PerksUIData.perkCardDataA.length == 0)
+         {
+            return;
+         }
+         if(LegendaryPerksMenuData == null || LegendaryPerksMenuData.perksArray == null || LegendaryPerksMenuData.perksArray.length == 0)
+         {
+            return;
+         }
+         if(_config.perkCardsConfig.perkCards == null || _config.perkCardsConfig.perkCards.length == 0)
+         {
+            this._examineMenu.displayError("PerkCardsConfig error: perkCards not found");
+            return;
+         }
+         if(this.perkCards_tf != null)
+         {
+            return;
+         }
+         this.initPerkCardsTextField();
+         this.perkCards_tf.text = "";
+         var i:int = 0;
+         while(i < PerksUIData.perkCardDataA.length)
+         {
+            if(_config.perkCardsConfig.perkCards.indexOf(PerksUIData.perkCardDataA[i].text) != -1)
+            {
+               if(PerksUIData.perkCardDataA[i].equipped)
+               {
+                  perkCardsData[PerksUIData.perkCardDataA[i].text] = PerksUIData.perkCardDataA[i].rank + 1;
+               }
+            }
+            i++;
+         }
+         i = 0;
+         while(i < LegendaryPerksMenuData.perksArray.length)
+         {
+            if(_config.perkCardsConfig.legendaryPerkCards.indexOf(LegendaryPerksMenuData.perksArray[i].perkName) != -1)
+            {
+               if(LegendaryPerksMenuData.perksArray[i].equipped)
+               {
+                  perkCardsData[LegendaryPerksMenuData.perksArray[i].perkName] = LegendaryPerksMenuData.perksArray[i].currentRank + 1;
+               }
+            }
+            i++;
+         }
+         var formatEquipped:* = null;
+         if(_config.perkCardsConfig.colorEquipped != null && !isNaN(_config.perkCardsConfig.colorEquipped))
+         {
+            formatEquipped = new TextFormat();
+            formatEquipped.color = _config.perkCardsConfig.colorEquipped;
+         }
+         var formatUnequipped:* = null;
+         if(_config.perkCardsConfig.colorUnequipped != null && !isNaN(_config.perkCardsConfig.colorUnequipped))
+         {
+            formatUnequipped = new TextFormat();
+            formatUnequipped.color = _config.perkCardsConfig.colorUnequipped;
+         }
+         var applyFormats:* = [];
+         var currentLineStartIndex:int = 0;
+         i = 0;
+         while(i < _config.perkCardsConfig.perkCards.length)
+         {
+            if(perkCardsData[_config.perkCardsConfig.perkCards[i]] != null)
+            {
+               if(!_config.perkCardsConfig.showOnlyUnequipped)
+               {
+                  this.perkCards_tf.text += " " + _config.perkCardsConfig.formatEquipped.replace("{name}",_config.perkCardsConfig.perkCards[i]).replace("{rank}",perkCardsData[_config.perkCardsConfig.perkCards[i]]) + "\n";
+                  if(formatEquipped != null)
+                  {
+                     applyFormats.push({
+                        "format":formatEquipped,
+                        "startIndex":currentLineStartIndex + 1,
+                        "endIndex":this.perkCards_tf.text.length - 1
+                     });
+                  }
+               }
+            }
+            else if(!_config.perkCardsConfig.showOnlyEquipped)
+            {
+               this.perkCards_tf.text += " " + _config.perkCardsConfig.formatUnequipped.replace("{name}",_config.perkCardsConfig.perkCards[i]).replace("{rank}","") + "\n";
+               if(formatUnequipped != null)
+               {
+                  applyFormats.push({
+                     "format":formatUnequipped,
+                     "startIndex":currentLineStartIndex + 1,
+                     "endIndex":this.perkCards_tf.text.length - 1
+                  });
+               }
+            }
+            currentLineStartIndex = this.perkCards_tf.text.length;
+            i++;
+         }
+         i = 0;
+         while(i < _config.perkCardsConfig.legendaryPerkCards.length)
+         {
+            if(perkCardsData[_config.perkCardsConfig.legendaryPerkCards[i]] != null)
+            {
+               if(!_config.perkCardsConfig.showOnlyUnequipped)
+               {
+                  this.perkCards_tf.text += " " + _config.perkCardsConfig.formatEquipped.replace("{name}",_config.perkCardsConfig.legendaryPerkCards[i]).replace("{rank}",perkCardsData[_config.perkCardsConfig.legendaryPerkCards[i]]) + "\n";
+                  if(formatEquipped != null)
+                  {
+                     applyFormats.push({
+                        "format":formatEquipped,
+                        "startIndex":currentLineStartIndex + 1,
+                        "endIndex":this.perkCards_tf.text.length - 1
+                     });
+                  }
+               }
+            }
+            else if(!_config.perkCardsConfig.showOnlyEquipped)
+            {
+               this.perkCards_tf.text += " " + _config.perkCardsConfig.formatUnequipped.replace("{name}",_config.perkCardsConfig.legendaryPerkCards[i]).replace("{rank}","") + "\n";
+               if(formatUnequipped != null)
+               {
+                  applyFormats.push({
+                     "format":formatUnequipped,
+                     "startIndex":currentLineStartIndex + 1,
+                     "endIndex":this.perkCards_tf.text.length - 1
+                  });
+               }
+            }
+            currentLineStartIndex = this.perkCards_tf.text.length;
+            i++;
+         }
+         i = 0;
+         while(i < applyFormats.length)
+         {
+            this.perkCards_tf.setTextFormat(applyFormats[i].format,applyFormats[i].startIndex,applyFormats[i].endIndex);
+            i++;
+         }
+         this.perkCards_tf.visible = ExamineMenuMode != "inspect";
+         _examineMenu.displayError("Perk Cards Config initialized!");
       }
       
       public function initUI() : void
