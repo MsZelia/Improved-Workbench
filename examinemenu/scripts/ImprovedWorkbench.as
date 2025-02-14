@@ -286,7 +286,7 @@ package
       
       private function useRepairKit() : void
       {
-         if(Debug)
+         if(false)
          {
             _examineMenu.displayError("entries: " + toString(_examineMenu.ItemCardList_mc.InfoObj));
          }
@@ -300,9 +300,13 @@ package
          {
             if(_examineMenu.ItemCardList_mc.InfoObj[i].text == "$health")
             {
-               if(_examineMenu.ItemCardList_mc.InfoObj[i].maximumHealth != 4294967295 && 100 * _examineMenu.ItemCardList_mc.InfoObj[i].currentHealth / _examineMenu.ItemCardList_mc.InfoObj[i].maximumHealth <= AutoUseRepairKitConditionBelow)
+               if(_examineMenu.ItemCardList_mc.InfoObj[i].currentHealth != -1 && _examineMenu.ItemCardList_mc.InfoObj[i].maximumHealth != 4294967295 && 100 * _examineMenu.ItemCardList_mc.InfoObj[i].currentHealth / _examineMenu.ItemCardList_mc.InfoObj[i].maximumHealth <= AutoUseRepairKitConditionBelow)
                {
                   _examineMenu.displayError("AutoRepairKit: durability: " + _examineMenu.ItemCardList_mc.InfoObj[i].value + " <= " + AutoUseRepairKitConditionBelow);
+                  if(_examineMenu.BGSCodeObj.OnRepairKit != null)
+                  {
+                     _examineMenu.BGSCodeObj.OnRepairKit();
+                  }
                }
                else
                {
