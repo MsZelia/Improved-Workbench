@@ -58,6 +58,10 @@ package
       
       public var ShowInventoryItemCount:Boolean = true;
       
+      public var AutoUseRepairKit:Boolean = false;
+      
+      public var AutoUseRepairKitConditionBelow:Number = 10;
+      
       private var hasScannedLegendaryMods:* = false;
       
       private var timer:Timer;
@@ -75,6 +79,8 @@ package
       private var perkCards_tf:TextField;
       
       private var perkCardsData:*;
+      
+      private var usedRepairKit:Boolean = false;
       
       public function ImprovedWorkbench(examineMenu:Object)
       {
@@ -207,6 +213,11 @@ package
                ImprovedQuantityMenu = Boolean(_config.enableImprovedQuantityMenu);
                EnableLegendaryModTracking = Boolean(_config.enableLegendaryModTracking);
                ShowInventoryItemCount = Boolean(_config.showInventoryItemCount);
+               AutoUseRepairKit = Boolean(_config.autoUseRepairKit);
+               if(AutoUseRepairKit && _config.autoUseRepairKitConditionBelow != null && !isNaN(_config.autoUseRepairKitConditionBelow))
+               {
+                  AutoUseRepairKitConditionBelow = Number(_config.autoUseRepairKitConditionBelow);
+               }
                Debug = Boolean(_config.debug);
                if(_config.defaultCraftAmount && !isNaN(_config.defaultCraftAmount))
                {
@@ -249,6 +260,38 @@ package
                {
                   setTimeout(loadExistingItemsmodIni,25);
                   setTimeout(writeLegendaryModsToFile,100);
+               }
+               else if(ExamineMenuMode == "inspect")
+               {
+                  if(!usedRepairKit && AutoUseRepairKit)
+                  {
+                     usedRepairKit = true;
+                     setTimeout(function():*
+                     {
+                        if(false)
+                        {
+                           _examineMenu.displayError("entries: " + toString(_examineMenu.ItemCardList_mc.InfoObj));
+                        }
+                        var i:int = _examineMenu.ItemCardList_mc.InfoObj.length - 1;
+                        while(i >= 0)
+                        {
+                           if(_examineMenu.ItemCardList_mc.InfoObj[i].text == "$StatDurability" || _examineMenu.ItemCardList_mc.InfoObj[i].text == "durability")
+                           {
+                              if(_examineMenu.ItemCardList_mc.InfoObj[i].value <= AutoUseRepairKitConditionBelow)
+                              {
+                                 _examineMenu.displayError("Using repair kit, durability: " + _examineMenu.ItemCardList_mc.InfoObj[i].value + " <= " + AutoUseRepairKitConditionBelow);
+                              }
+                              else
+                              {
+                                 _examineMenu.displayError("Not using repair kit, durability: " + _examineMenu.ItemCardList_mc.InfoObj[i].value + " > " + AutoUseRepairKitConditionBelow);
+                              }
+                              break;
+                           }
+                           i--;
+                        }
+                        _examineMenu.displayError("Used repair kit");
+                     },100);
+                  }
                }
                if(perkCards_tf != null)
                {
