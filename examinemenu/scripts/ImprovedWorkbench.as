@@ -300,7 +300,7 @@ package
          {
             if(_examineMenu.ItemCardList_mc.InfoObj[i].text == "$health")
             {
-               if(100 * _examineMenu.ItemCardList_mc.InfoObj[i].currentHealth / _examineMenu.ItemCardList_mc.InfoObj[i].maximumHealth <= AutoUseRepairKitConditionBelow)
+               if(_examineMenu.ItemCardList_mc.InfoObj[i].maximumHealth != 4294967295 && 100 * _examineMenu.ItemCardList_mc.InfoObj[i].currentHealth / _examineMenu.ItemCardList_mc.InfoObj[i].maximumHealth <= AutoUseRepairKitConditionBelow)
                {
                   _examineMenu.displayError("AutoRepairKit: durability: " + _examineMenu.ItemCardList_mc.InfoObj[i].value + " <= " + AutoUseRepairKitConditionBelow);
                }
