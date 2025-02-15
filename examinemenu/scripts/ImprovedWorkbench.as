@@ -19,7 +19,7 @@ package
       
       private static const MAX_CRAFTABLE:uint = 255;
       
-      public static const VERSION:String = "1.6.4";
+      public static const VERSION:String = "1.6.5";
       
       public static const MOD_NAME:String = "ImprovedWorkbench";
       
@@ -268,10 +268,7 @@ package
          });
          if(this.ShowInventoryItemCount)
          {
-            BSUIDataManager.Subscribe("PlayerInventoryData",function(event:*):*
-            {
-               mapInventory(event);
-            });
+            BSUIDataManager.Subscribe("PlayerInventoryData",mapInventory);
          }
       }
       
@@ -688,7 +685,7 @@ package
       
       public function updateInventoryCount() : void
       {
-         if(!this.ShowInventoryItemCount)
+         if(!this.ShowInventoryItemCount || ExamineMenuMode != "crafting")
          {
             return;
          }
