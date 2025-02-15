@@ -242,30 +242,30 @@ package
       {
          ItemCard_Entry.zel_ShowDurability = ShowDurability;
          QuantityMenu.zel_ImprovedMenu = ImprovedQuantityMenu;
-         if(this.EnableLegendaryModTracking)
+         BSUIDataManager.Subscribe("ExamineMenuMode",function(event:FromClientDataEvent):*
          {
-            BSUIDataManager.Subscribe("ExamineMenuMode",function(event:FromClientDataEvent):*
+            ExamineMenuMode = event.data.mode;
+            if(ExamineMenuMode == "crafting")
             {
-               ExamineMenuMode = event.data.mode;
-               if(ExamineMenuMode == "crafting")
+               if(EnableLegendaryModTracking)
                {
                   setTimeout(loadExistingItemsmodIni,25);
                   setTimeout(writeLegendaryModsToFile,100);
                }
-               else if(ExamineMenuMode == "inspect")
+            }
+            else if(ExamineMenuMode == "inspect")
+            {
+               if(!usedRepairKit && _config.autoUseRepairKit != null && Boolean(_config.autoUseRepairKit.enabled))
                {
-                  if(!usedRepairKit && _config.autoUseRepairKit != null && Boolean(_config.autoUseRepairKit.enabled))
-                  {
-                     usedRepairKit = true;
-                     setTimeout(useRepairKit,100);
-                  }
+                  usedRepairKit = true;
+                  setTimeout(useRepairKit,100);
                }
-               if(perkCards_tf != null)
-               {
-                  perkCards_tf.visible = ExamineMenuMode != "inspect";
-               }
-            });
-         }
+            }
+            if(perkCards_tf != null)
+            {
+               perkCards_tf.visible = ExamineMenuMode != "inspect";
+            }
+         });
          if(this.ShowInventoryItemCount)
          {
             BSUIDataManager.Subscribe("PlayerInventoryData",function(event:*):*
