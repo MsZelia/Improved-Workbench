@@ -13,7 +13,7 @@ package Shared.AS3.Styles
       
       public static var restoreListIndex_Inspectable:Boolean = false;
       
-      public static var verticalSpacing_Inspectable:Number = 2.5;
+      public static var verticalSpacing_Inspectable:Number = 0.5;
        
       
       public function ExamineMenu_CurrentModListStyle()

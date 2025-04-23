@@ -56,6 +56,7 @@ package
       
       public function ItemCard()
       {
+         this.m_EntrySpacing = -3.5;
          super();
          this._InfoObj = new Array();
          this._showItemDesc = true;
