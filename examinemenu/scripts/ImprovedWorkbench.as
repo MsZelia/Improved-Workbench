@@ -235,6 +235,7 @@ package
                EnableLegendaryModTracking = Boolean(_config.enableLegendaryModTracking);
                ShowInventoryItemCount = Boolean(_config.showInventoryItemCount);
                Debug = Boolean(_config.debug);
+               DEBUG_SELECTION = Boolean(_config.debugSelection);
                if(_config.defaultCraftAmount && !isNaN(_config.defaultCraftAmount))
                {
                   DefaultCraftAmount = GlobalFunc.Clamp(uint(_config.defaultCraftAmount),1,MAX_CRAFTABLE);
