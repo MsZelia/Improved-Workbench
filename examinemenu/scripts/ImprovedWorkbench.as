@@ -22,7 +22,7 @@ package
       
       private static const MAX_CRAFTABLE:uint = 255;
       
-      public static const VERSION:String = "1.6.9";
+      public static const VERSION:String = "1.7.0";
       
       public static const MOD_NAME:String = "ImprovedWorkbench";
       

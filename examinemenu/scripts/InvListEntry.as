@@ -22,6 +22,8 @@ package
       
       public var ATXCost_mc:MovieClip;
       
+      public var ItemLockIcon_mc:MovieClip;
+      
       public function InvListEntry()
       {
          super();
@@ -65,10 +67,15 @@ package
             }
             textField.filters = [new DropShadowFilter(2,135,0,1,1,1,1,BitmapFilterQuality.HIGH)];
          }
-         this.EquipIconInstance.visible = param1.equipState > 0;
-         this.FavoriteIconInstance.visible = param1.favorite == true;
-         this.BestIconInstance.visible = param1.bestInClass == true;
-         this.SetBonusIcon_mc.visible = param1.isSetItem == true;
+         this.EquipIconInstance.visible = param1.equipState > 0 && !(ExamineMenu.IsTransferLockingFeatureEnabled && param1.isTransferLocked);
+         this.FavoriteIconInstance.visible = param1.favorite;
+         this.BestIconInstance.visible = param1.bestInClass;
+         this.SetBonusIcon_mc.visible = param1.isSetItem;
+         this.ItemLockIcon_mc.visible = Boolean(param1.isTransferLocked) && ExamineMenu.IsTransferLockingFeatureEnabled;
+         if(this.ItemLockIcon_mc.visible)
+         {
+            this.ItemLockIcon_mc.gotoAndStop(param1.isTransferLocked && ExamineMenu.IsTransferLockingFeatureEnabled && param1.equipState > 0 ? "isEquipped" : "isUnequipped");
+         }
          if(this.SetBonusIcon_mc.visible)
          {
             this.SetBonusIcon_mc.gotoAndStop(Boolean(param1.isSetBonusActive) && param1.equipState > 0 ? "active" : "inactive");
@@ -88,6 +95,7 @@ package
          SetColorTransform(this.FavoriteIconInstance,this.selected);
          SetColorTransform(this.BestIconInstance,this.selected);
          SetColorTransform(this.SetBonusIcon_mc,this.selected);
+         SetColorTransform(this.ItemLockIcon_mc,this.selected);
          if(this.ATXCost_mc != null)
          {
             if(param1.isMTX && !param1.hasEntitlement && param1.mtxPrice != null)
