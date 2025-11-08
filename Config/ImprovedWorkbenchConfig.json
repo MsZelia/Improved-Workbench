@@ -1,0 +1,97 @@
+{
+	"hideLoadMessage": false,
+	"showDurabilityValue": true,
+	"enableExamineRepairAll": true,
+	"enableQuickRepairButton": true,
+	"enableImprovedQuantityMenu": true,
+	"enableLegendaryModTracking": false,
+	"defaultCraftAmount": 1,
+	"showInventoryItemCount": true,
+	"customRepairKitRepairHotkey": 0,
+	"customWorkbenchRepairHotkey": 0,
+	"autoUseRepairKit": {
+		"enabled": false,
+		"conditionUnder": 15,
+		"exitAfterRepair": true,
+		"exitDelay": 250
+	},
+	"perkCardsConfig": {
+		"enabled": false,
+		"textField": {
+			"x": 670,
+			"y": 590,
+			"textSize": 24,
+			"textFont": "$MAIN_Font_Bold",
+			"textAlign": "left",
+			"textColor": "0xf4ca5b",
+			"textShadow": true
+		},
+		"headerText": "",
+		"showOnlyEquipped": false,
+		"showOnlyUnequipped": false,
+		"colorEquipped": "0xf4ca5b",
+		"colorUnequipped": "0xff0000",
+		"formatEquipped": "[{rank}] {name}",
+		"formatUnequipped": "[N/A] {name}",
+		"perkCards": [
+			"Super Duper",
+			"Chemist",
+			"Fix It Good",
+			"Weapon Artisan",
+			"Ammosmith"
+		],
+		"legendaryPerkCards": ["Ammo Factory"]
+	},
+	"uiConfig": {
+		"enabled": false,
+		"hideVignette": true,
+		"hideBackground": true,
+		"hideHeader": true,
+		"ItemName": {
+			"x": -490,
+			"y": 0,
+			"align": "left"
+		},
+		"ItemDescription": {
+			"x": -400,
+			"y": 0,
+			"align": "left"
+		},
+		"ItemCard": {
+			"x": 1300,
+			"y": 70
+		},
+		"Inventory": {
+			"x": -600,
+			"y": 30
+		},
+		"CraftingHierarchy": {
+			"x": -600,
+			"y": 30
+		},
+		"KnownMods": {
+			"x": -700,
+			"y": 74
+		},
+		"ModDescription": {
+			"x": 0,
+			"y": 20
+		},
+		"Mods": {
+			"x": 287,
+			"y": -500
+		},
+		"PerksLabel": {
+			"x": -1590,
+			"y": -200
+		},
+		"PerksPanel1": {
+			"x": -1590,
+			"y": -200
+		},
+		"PerksPanel2": {
+			"x": -1375,
+			"y": -382
+		}
+	}
+}
