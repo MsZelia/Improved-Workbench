@@ -237,10 +237,6 @@ package
                {
                   DefaultCraftAmount = GlobalFunc.Clamp(uint(_config.defaultCraftAmount),1,MAX_CRAFTABLE);
                }
-               if(_config.legendaryModTrackingLoadFileDirectory != null && _config.legendaryModTrackingLoadFileDirectory.length > 0)
-               {
-                  LEGENDARY_LOAD_FILE_LOCATION = _config.legendaryModTrackingLoadFileDirectory;
-               }
                initPerkCardsConfig(null);
                if(_config.customRepairKitRepairHotkey && !isNaN(_config.customRepairKitRepairHotkey))
                {
