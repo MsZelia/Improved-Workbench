@@ -56,11 +56,12 @@ package
       
       public var DefaultCraftAmount:uint = 1;
       
-      public var EnableLegendaryModTracking:Boolean = false;
-      
       public var ShowInventoryItemCount:Boolean = true;
       
       private var hasScannedLegendaryMods:* = false;
+
+      private var legendaryModKeepList:* = [];
+      private var legendaryModBlockList:* = [];
       
       private var timer:Timer;
       
@@ -229,7 +230,6 @@ package
                EnableRepairAll = Boolean(_config.enableExamineRepairAll);
                EnableQuickRepairButton = Boolean(_config.enableQuickRepairButton);
                ImprovedQuantityMenu = Boolean(_config.enableImprovedQuantityMenu);
-               EnableLegendaryModTracking = Boolean(_config.enableLegendaryModTracking);
                ShowInventoryItemCount = Boolean(_config.showInventoryItemCount);
                Debug = Boolean(_config.debug);
                DEBUG_SELECTION = Boolean(_config.debugSelection);
@@ -264,6 +264,35 @@ package
             ShowMessage("Error loading config: " + e);
          }
       }
+
+      private function initLegendaryModTracking() : *
+      {
+         if(!_config || !_config.legendaryModTrackingConfig || !_config.legendaryModTrackingConfig.enabled)
+         {
+            return;
+         }
+
+         if(_config.legendaryModTrackingConfig.keepList)
+         {
+            this.legendaryModKeepList = _config.legendaryModTrackingConfig.keepList.map(function(mod) { return mod.toLowerCase() });
+         }
+         else
+         {
+            this.legendaryModKeepList = [];
+         }
+
+         if(_config.legendaryModTrackingConfig.blockList)
+         {
+            this.legendaryModBlockList = _config.legendaryModTrackingConfig.blockList.map(function(mod) { return mod.toLowerCase() });
+         }
+         else
+         {
+            this.legendaryModBlockList = [];
+         }
+
+         setTimeout(loadExistingItemsmodIni,25);
+         setTimeout(writeLegendaryModsToFile,100);
+      }
       
       private function init() : *
       {
@@ -274,11 +303,7 @@ package
             ExamineMenuMode = event.data.mode;
             if(ExamineMenuMode == "crafting")
             {
-               if(EnableLegendaryModTracking)
-               {
-                  setTimeout(loadExistingItemsmodIni,25);
-                  setTimeout(writeLegendaryModsToFile,100);
-               }
+               this.initLegendaryModTracking();
             }
             else if(ExamineMenuMode == "inspect")
             {
@@ -922,6 +947,7 @@ package
          {
             currentMod = allLegendaryMods[j];
             currentMod.isLearned = Boolean(learnedLegendaryModNamesDict[currentMod.fullName]);
+            currentMod.isKept = this.legendaryModKeepList.contains(currentMod.fullName.toLowerCase());
             j++;
          }
          var characterName:* = BSUIDataManager.GetDataFromClient("CharacterNameData").data.characterName;
@@ -991,6 +1017,12 @@ package
                      var legendaryModDesc:* = {};
                      var descParts:* = legendaryMod.description.split("\n");
                      var k:* = 0;
+
+                     if(this.legendaryModBlockList.contains(legendaryModName.toLowerCase()))
+                     {
+                        continue;
+                     }
+
                      while(k < descParts.length)
                      {
                         var part:* = descParts[k].replace(LEGENDARY_MOD_CURRENTLY_REGEX,"").replace(/^\s+|\s+$/g,"");
