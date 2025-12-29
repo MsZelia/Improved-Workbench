@@ -266,38 +266,6 @@ package
          }
       }
       
-      private function initLegendaryModTracking() : *
-      {
-         if(!_config || !_config.legendaryModTrackingConfig || !_config.legendaryModTrackingConfig.enabled)
-         {
-            return;
-         }
-         if(_config.legendaryModTrackingConfig.keepList)
-         {
-            this.legendaryModKeepList = _config.legendaryModTrackingConfig.keepList.map(function(mod:*):*
-            {
-               return mod.toLowerCase();
-            });
-         }
-         else
-         {
-            this.legendaryModKeepList = [];
-         }
-         if(_config.legendaryModTrackingConfig.blockList)
-         {
-            this.legendaryModBlockList = _config.legendaryModTrackingConfig.blockList.map(function(mod:*):*
-            {
-               return mod.toLowerCase();
-            });
-         }
-         else
-         {
-            this.legendaryModBlockList = [];
-         }
-         setTimeout(loadExistingItemsmodIni,25);
-         setTimeout(writeLegendaryModsToFile,100);
-      }
-      
       private function init() : *
       {
          ItemCard_Entry.zel_ShowDurability = ShowDurability;
@@ -884,6 +852,32 @@ package
          }
          return false;
       }
+
+      private function initLegendaryModTracking() : *
+      {
+         if(_config == null || _config.legendaryModTrackingConfig == null || !_config.legendaryModTrackingConfig.enabled)
+         {
+            return;
+         }
+         if(_config.legendaryModTrackingConfig.keepList != null)
+         {
+            this.legendaryModKeepList = _config.legendaryModTrackingConfig.keepList.map(function(mod:*):*
+            {
+               return mod.toLowerCase();
+            });
+            this._examineMenu.displayError("Legendary Mods to Keep: " + this.legendaryModKeepList.join(", "));
+         }
+         if(_config.legendaryModTrackingConfig.blockList != null)
+         {
+            this.legendaryModBlockList = _config.legendaryModTrackingConfig.blockList.map(function(mod:*):*
+            {
+               return mod.toLowerCase();
+            });
+            this._examineMenu.displayError("Legendary Mods to Block: " + this.legendaryModBlockList.join(", "));
+         }
+         setTimeout(loadExistingItemsmodIni,25);
+         setTimeout(writeLegendaryModsToFile,100);
+      }
       
       private function writeLegendaryModsToFile() : *
       {
@@ -951,7 +945,8 @@ package
          {
             currentMod = allLegendaryMods[j];
             currentMod.isLearned = Boolean(learnedLegendaryModNamesDict[currentMod.fullName]);
-            currentMod.isKept = this.legendaryModKeepList.indexOf(currentMod.fullName.toLowerCase()) != -1;
+            var currentModName:* = trimString(replaceInString(currentMod.fullName.toLowerCase(),"¬",""));
+            currentMod.isKept = this.legendaryModKeepList.indexOf(currentMod.fullName) != -1 || this.legendaryModKeepList.indexOf(currentModName) != -1;
             j++;
          }
          var characterName:* = BSUIDataManager.GetDataFromClient("CharacterNameData").data.characterName;
@@ -1021,11 +1016,8 @@ package
                      var legendaryModDesc:* = {};
                      var descParts:* = legendaryMod.description.split("\n");
                      var k:* = 0;
-                     if(this.legendaryModBlockList.indexOf(legendaryModName.toLowerCase()) != -1)
-                     {
-                        continue;
-                     }
-                     while(k < descParts.length)
+                     var isBlocked:* = this.legendaryModBlockList.indexOf(legendaryModName.toLowerCase()) != -1;
+                     while(!isBlocked && k < descParts.length)
                      {
                         var part:* = descParts[k].replace(LEGENDARY_MOD_CURRENTLY_REGEX,"").replace(/^\s+|\s+$/g,"");
                         if(part.length != 0)
@@ -1064,12 +1056,15 @@ package
                         }
                         k++;
                      }
-                     learnedModsList.push({
-                        "fullName":legendaryModFullName,
-                        "stars":legendaryModStars,
-                        "name":legendaryModName,
-                        "description":legendaryModDesc
-                     });
+                     if(!isBlocked)
+                     {
+                        learnedModsList.push({
+                           "fullName":legendaryModFullName,
+                           "stars":legendaryModStars,
+                           "name":legendaryModName,
+                           "description":legendaryModDesc
+                        });
+                     }
                   }
                   j++;
                }
