@@ -22,7 +22,7 @@ package
       
       private static const MAX_CRAFTABLE:uint = 255;
       
-      public static const VERSION:String = "1.7.4";
+      public static const VERSION:String = "1.7.5";
       
       public static const MOD_NAME:String = "ImprovedWorkbench";
       
@@ -36,7 +36,7 @@ package
       
       public static const LEGENDARY_MOD_ARMOR_REGEX:* = /(ARMOR|Rüstung|Armadura|Armure|Armatura|アーマー|방어구|Pancerz|Броня|装甲|裝甲)/i;
       
-      public static const LEGENDARY_MOD_POWER_ARMOR_REGEX:* = /(POWER ARMOR|Motorisierte Rüstung|Servoarmadura|Armure assistée|Corazza atomica|パワーアーマー|파워 아머|Pancerz wspomagany|Силовая броня|动力装甲|動力裝甲)/i;
+      public static const LEGENDARY_MOD_POWER_ARMOR_REGEX:* = /(POWER ARMOR|Powerrüstung|Servoarmadura|Armure assistée|Armatura atomica|Armadura Potente|パワーアーマー|파워 아머|Pancerz wspomagany|Силовая броня|动力装甲|動力裝甲)/i;
       
       public static const LEGENDARY_MOD_WEAPONS_REGEX:* = /(WEAPONS|Waffen|Armas|Armes|Armi|武器|무기|UZBROJENIE|BROŃ BIAŁA|Оружие|ОРУЖИЕ)/i;
       
@@ -854,7 +854,7 @@ package
          }
          return false;
       }
-
+      
       private function initLegendaryModTracking() : *
       {
          if(_config == null || _config.legendaryModTrackingConfig == null || !_config.legendaryModTrackingConfig.enabled)
