@@ -36,6 +36,8 @@ package
       
       public static const LEGENDARY_MOD_ARMOR_REGEX:* = /(ARMOR|Rüstung|Armadura|Armure|Armatura|アーマー|방어구|Pancerz|Броня|装甲|裝甲)/i;
       
+      public static const LEGENDARY_MOD_POWER_ARMOR_REGEX:* = /(POWER ARMOR|Motorisierte Rüstung|Servoarmadura|Armure assistée|Corazza atomica|パワーアーマー|파워 아머|Pancerz wspomagany|Силовая броня|动力装甲|動力裝甲)/i;
+      
       public static const LEGENDARY_MOD_WEAPONS_REGEX:* = /(WEAPONS|Waffen|Armas|Armes|Armi|武器|무기|UZBROJENIE|BROŃ BIAŁA|Оружие|ОРУЖИЕ)/i;
       
       public static const LEGENDARY_MOD_RAPID_REGEX:* = /(Rapid|Rapidité|Veloz|Schnell|Rapido|Dynamiczny|Стремительное|迅速な|재빠른|速射)/i;
@@ -1025,9 +1027,14 @@ package
                            var endOfBracketIndex:* = part.indexOf("] ");
                            if(endOfBracketIndex > -1)
                            {
+                              var findPowerArmorIndex:int = int(part.search(LEGENDARY_MOD_POWER_ARMOR_REGEX));
                               var findArmorIndex:int = int(part.search(LEGENDARY_MOD_ARMOR_REGEX));
                               var findWeaponsIndex:int = int(part.search(LEGENDARY_MOD_WEAPONS_REGEX));
-                              if(findArmorIndex > -1 && findArmorIndex < endOfBracketIndex)
+                              if(findPowerArmorIndex > -1 && findPowerArmorIndex < endOfBracketIndex)
+                              {
+                                 legendaryModDesc.powerArmor = part.slice(endOfBracketIndex + 2);
+                              }
+                              else if(findArmorIndex > -1 && findArmorIndex < endOfBracketIndex)
                               {
                                  legendaryModDesc.armor = part.slice(endOfBracketIndex + 2);
                               }
