@@ -6,6 +6,7 @@
 	"enableImprovedQuantityMenu": true,
 	"defaultCraftAmount": 1,
 	"showInventoryItemCount": true,
+	"showInventoryComponentsCount": true,
 	"customRepairKitRepairHotkey": 0,
 	"customWorkbenchRepairHotkey": 0,
 	
