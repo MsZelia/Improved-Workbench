@@ -43,6 +43,8 @@ package
       
       private const ET_HIDE_DIFFERENCE:uint = 11;
       
+      private const ET_UNSPECIFIED:uint = 12;
+      
       private var m_BlankEntryFillTarget:uint = 0;
       
       private var m_EntrySpacing:Number = -3.5;
@@ -243,7 +245,7 @@ package
                      this._InfoObj[_loc12_].damageType = _loc18_;
                      this._InfoObj[_loc12_].text = ItemCard_MultiEntry.DMG_ARMO_ID;
                   }
-                  else if(this._InfoObj[_loc12_].showAsDescription != true)
+                  else if(this._InfoObj[_loc12_].entryType != this.ET_ITEM_DESCRIPTION || this._InfoObj[_loc12_].showAsDescription != undefined && !this._InfoObj[_loc12_].showAsDescription)
                   {
                      if(ItemCard_DurabilityEntry.IsEntryValid(this._InfoObj[_loc12_]))
                      {
@@ -274,7 +276,7 @@ package
          {
             for each(_loc21_ in this._InfoObj)
             {
-               if(_loc21_.showAsDescription == true)
+               if((_loc21_.showAsDescription == true || _loc21_.entryType == this.ET_ITEM_DESCRIPTION) && _loc21_.value != "")
                {
                   _loc6_.push(_loc21_);
                }
@@ -421,7 +423,7 @@ package
          {
             _loc2_ = this.ET_VALUE;
          }
-         else if(param1.damageType == 10)
+         else if(param1.damageType == 10 || param1.entryType == this.ET_AMMO)
          {
             _loc2_ = this.ET_AMMO;
          }

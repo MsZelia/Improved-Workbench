@@ -1,5 +1,10 @@
 package Shared.AS3
 {
+   import flash.display.DisplayObject;
+   import flash.display.MovieClip;
+   import scaleform.gfx.Extensions;
+   import scaleform.gfx.TextFieldEx;
+   
    public class PerkClipBase extends BSDisplayObject
    {
       
@@ -27,6 +32,10 @@ package Shared.AS3
       
       public static const RACE_RESTRICTION_GHOUL:uint = 2;
       
+      public var Title_mc:MovieClip;
+      
+      public var VaultBoyImageContainer_mc:SWFLoaderClip;
+      
       protected var m_PerkID:uint = 4294967295;
       
       protected var m_PerkName:String = "";
@@ -34,6 +43,8 @@ package Shared.AS3
       protected var m_Description:String = "";
       
       protected var m_VaultBoyImageName:String;
+      
+      protected var m_VaultBoyImage:DisplayObject;
       
       protected var m_Level:uint = 1;
       
@@ -67,9 +78,16 @@ package Shared.AS3
       
       protected var m_PlayerRaceRestriction:uint = 0;
       
+      protected var m_RefreshVBImage:Boolean = false;
+      
+      private var m_Animated:Boolean = false;
+      
       public function PerkClipBase()
       {
          super();
+         this.VaultBoyImageContainer_mc.clipScale = 1;
+         Extensions.enabled = true;
+         TextFieldEx.setTextAutoSize(this.Title_mc.Title_tf,TextFieldEx.TEXTAUTOSZ_SHRINK);
       }
       
       public function set perkID(param1:uint) : void
@@ -115,6 +133,7 @@ package Shared.AS3
          if(param1 != this.m_VaultBoyImageName)
          {
             this.m_VaultBoyImageName = param1;
+            this.m_RefreshVBImage = true;
             SetIsDirty();
          }
       }
@@ -273,9 +292,50 @@ package Shared.AS3
          }
       }
       
+      public function get animated() : Boolean
+      {
+         return this.m_Animated;
+      }
+      
+      public function set animated(param1:Boolean) : void
+      {
+         if(param1 != this.m_Animated)
+         {
+            this.m_Animated = param1;
+            this.m_RefreshVBImage = true;
+            SetIsDirty();
+         }
+      }
+      
       public function get pplayerRaceRestriction() : uint
       {
          return this.m_PlayerRaceRestriction;
+      }
+      
+      public function get refreshVBImage() : Boolean
+      {
+         return this.m_RefreshVBImage;
+      }
+      
+      protected function updateVaultBoyImage(param1:Boolean) : void
+      {
+         if(this.m_VaultBoyImage != null)
+         {
+            this.VaultBoyImageContainer_mc.removeChild(this.m_VaultBoyImage);
+            this.m_VaultBoyImage = null;
+         }
+         if(param1)
+         {
+            this.m_VaultBoyImage = this.VaultBoyImageContainer_mc.setContainerIconClip(this.m_VaultBoyImageName,"","Default");
+            if(this.m_VaultBoyImage == null)
+            {
+               this.m_VaultBoyImage = this.VaultBoyImageContainer_mc.setContainerIconClip("Default");
+            }
+            else
+            {
+               (this.m_VaultBoyImage as MovieClip).gotoAndStop(this.m_Animated ? "animated" : "static");
+            }
+         }
       }
    }
 }
