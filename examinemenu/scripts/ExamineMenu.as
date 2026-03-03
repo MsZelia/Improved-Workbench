@@ -1226,6 +1226,7 @@ package
          {
             this.BGSCodeObj.LevelSelectChanged(_loc2_.level);
          }
+         this._improvedWorkbench.updateComponentsCount();
       }
       
       public function UpdateBackground() : *
@@ -1632,10 +1633,7 @@ package
          {
             _loc1_ = this.InventoryBase_mc.InventoryList_mc.selectedEntry;
          }
-         if(this.isCrafting)
-         {
-            this._improvedWorkbench.updateInventoryCount();
-         }
+         this._improvedWorkbench.updateInventoryCount();
       }
       
       private function hasValidEntries() : Boolean
@@ -2681,10 +2679,7 @@ package
             }
          }
          this.CraftingHeirarchy_mc.CraftingHeirarchy_tf.text = _loc2_.toUpperCase();
-         if(this.isCrafting)
-         {
-            this._improvedWorkbench.updateInventoryCount();
-         }
+         this._improvedWorkbench.updateInventoryCount();
       }
       
       internal function frame12() : *

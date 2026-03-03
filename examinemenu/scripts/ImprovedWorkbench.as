@@ -22,7 +22,7 @@ package
       
       private static const MAX_CRAFTABLE:uint = 255;
       
-      public static const VERSION:String = "1.7.5";
+      public static const VERSION:String = "1.8.0";
       
       public static const MOD_NAME:String = "ImprovedWorkbench";
       
@@ -59,6 +59,8 @@ package
       public var DefaultCraftAmount:uint = 1;
       
       public var ShowInventoryItemCount:Boolean = true;
+      
+      public var ShowInventoryComponentsCount:Boolean = true;
       
       private var hasScannedLegendaryMods:* = false;
       
@@ -234,6 +236,7 @@ package
                EnableQuickRepairButton = Boolean(_config.enableQuickRepairButton);
                ImprovedQuantityMenu = Boolean(_config.enableImprovedQuantityMenu);
                ShowInventoryItemCount = Boolean(_config.showInventoryItemCount);
+               ShowInventoryComponentsCount = Boolean(_config.showInventoryComponentsCount);
                Debug = Boolean(_config.debug);
                DEBUG_SELECTION = Boolean(_config.debugSelection);
                if(_config.defaultCraftAmount && !isNaN(_config.defaultCraftAmount))
@@ -741,21 +744,57 @@ package
       
       public function updateInventoryCount() : void
       {
-         if(!this.ShowInventoryItemCount || ExamineMenuMode != "crafting")
+         var i:int;
+         var count:*;
+         try
          {
-            return;
-         }
-         var i:int = 0;
-         while(i < _examineMenu.InventoryBase_mc.InventoryList_mc.entryList.length)
-         {
-            var count:* = inventoryCounts[_examineMenu.InventoryBase_mc.InventoryList_mc.entryList[i].text.replace(/\s*x[0-9]+/,"").replace(/\s*¢/,"")];
-            if(count > 0)
+            if(this.ShowInventoryItemCount && ExamineMenuMode == "crafting")
             {
-               _examineMenu.InventoryBase_mc.InventoryList_mc.entryList[i].text += " (" + count + ")";
+               i = 0;
+               while(i < _examineMenu.InventoryBase_mc.InventoryList_mc.entryList.length)
+               {
+                  count = inventoryCounts[_examineMenu.InventoryBase_mc.InventoryList_mc.entryList[i].text.replace(/\s*x[0-9]+/,"").replace(/\s*¢/,"")];
+                  if(count > 0)
+                  {
+                     _examineMenu.InventoryBase_mc.InventoryList_mc.entryList[i].text += " (" + count + ")";
+                  }
+                  i++;
+               }
+               _examineMenu.InventoryBase_mc.InventoryList_mc.InvalidateData();
             }
-            i++;
          }
-         _examineMenu.InventoryBase_mc.InventoryList_mc.InvalidateData();
+         catch(e:*)
+         {
+            _examineMenu.displayError("Error updating inventory count: " + e);
+         }
+         this.updateComponentsCount();
+      }
+      
+      public function updateComponentsCount() : void
+      {
+         var i:int;
+         var count:*;
+         try
+         {
+            if(this.ShowInventoryComponentsCount)
+            {
+               i = 0;
+               while(i < _examineMenu.ModSlotBase_mc.ModSlotList_mc.entryList.length)
+               {
+                  count = inventoryCounts[_examineMenu.ModSlotBase_mc.ModSlotList_mc.entryList[i].text.replace(/\s*[0-9]+\/[0-9]+/,"").replace(/\s*¢/,"")];
+                  if(count > 0)
+                  {
+                     _examineMenu.ModSlotBase_mc.ModSlotList_mc.entryList[i].text += " (" + count + ")";
+                  }
+                  i++;
+               }
+               _examineMenu.ModSlotBase_mc.ModSlotList_mc.InvalidateData();
+            }
+         }
+         catch(e:*)
+         {
+            _examineMenu.displayError("Error updating components count: " + e);
+         }
       }
       
       private function setAlignment(obj:*, align:String) : void
