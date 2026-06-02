@@ -6,7 +6,7 @@ package
    import flash.events.Event;
    import flash.events.KeyboardEvent;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol48")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol50")]
    public class ItemSelectList extends BSScrollingList
    {
       

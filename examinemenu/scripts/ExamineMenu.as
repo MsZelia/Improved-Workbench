@@ -30,7 +30,7 @@ package
    import scaleform.gfx.Extensions;
    import scaleform.gfx.TextFieldEx;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol443")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol442")]
    public class ExamineMenu extends IMenu
    {
       
@@ -49,6 +49,8 @@ package
       public static const EVENT_LOCK_ITEM:String = "ExamineMenu::TransferLockToggle";
       
       private static var m_IsTransferLockingFeatureEnabled:Boolean = false;
+      
+      private static var m_bTransferLockSettingAllowCraftingUse:Boolean = false;
       
       public var BGSCodeObj:Object;
       
@@ -152,8 +154,6 @@ package
       
       private var ModSlotButtonHints:Vector.<BSButtonHintData>;
       
-      private var ModButton:BSButtonHintData;
-      
       private var BackButton:BSButtonHintData;
       
       private var ScrapButton:BSButtonHintData;
@@ -193,8 +193,6 @@ package
       private var Add:BSButtonHintData;
       
       protected var ItemLevelSelectButtons:Vector.<BSButtonHintData>;
-      
-      protected var ItemLevelAcceptButton:BSButtonHintData;
       
       protected var ItemLevelCancelButton:BSButtonHintData;
       
@@ -343,7 +341,6 @@ package
          this.ZoomOutButton = new BSButtonHintData("$ZOOM OUT","Wheel down","PSN_L2","Xenon_L2",1,this.onZoomOutButton);
          this.ExitButton = new BSButtonHintData("$EXIT","TAB","PSN_B","Xenon_B",1,this.onBackButton);
          this.ToggleCraftingButton = new BSButtonHintData("$SWITCHTOCRAFT","R","PSN_X","Xenon_X",1,this.onToggleCraftingbutton);
-         this.ModButton = new BSButtonHintData("$MODIFY","Space","PSN_A","Xenon_A",1,this.onModButton);
          this.BackButton = new BSButtonHintData("$BACK","TAB","PSN_B","Xenon_B",1,this.onBackButton);
          this.ScrapButton = new BSButtonHintData("$SCRAP","G","PSN_R2","Xenon_R2",1,this.onScrapBuildAdd);
          this.ToggleEquipButton = new BSButtonHintData("$EQUIP","F","PSN_L2","Xenon_L2",1,this.onToggleEquip);
@@ -360,7 +357,6 @@ package
          this.AlternateButton = new BSButtonHintData("","R","PSN_X","Xenon_X",1,this.onAlternateButton);
          this.Build = new BSButtonHintData("$BUILD","R","PSN_X","Xenon_X",1,this.onScrapBuildAdd);
          this.Add = new BSButtonHintData("$ADD","R","PSN_X","Xenon_X",1,this.onScrapBuildAdd);
-         this.ItemLevelAcceptButton = new BSButtonHintData("$ACCEPT","Space","PSN_A","Xenon_A",1,this.onModButton);
          this.ItemLevelCancelButton = new BSButtonHintData("$CANCEL","TAB","PSN_B","Xenon_B",1,this.onBackButton);
          this.QuantityAcceptButton = new BSButtonHintData("$ACCEPT","Space","PSN_A","Xenon_A",1,this.onQuantityAccept);
          this.QuantityCancelButton = new BSButtonHintData("$CANCEL","TAB","PSN_B","Xenon_B",1,this.onQuantityCancel);
@@ -392,6 +388,11 @@ package
       public static function get IsTransferLockingFeatureEnabled() : Boolean
       {
          return m_IsTransferLockingFeatureEnabled;
+      }
+      
+      public static function get TransferLockSettingAllowCraftingUse() : Boolean
+      {
+         return m_bTransferLockSettingAllowCraftingUse;
       }
       
       public function rescale() : void
@@ -854,6 +855,13 @@ package
                   m_IsTransferLockingFeatureEnabled = param1.data.isTransferLockingFeatureEnabled;
                   InventoryBase_mc.InventoryList_mc.InvalidateData();
                }
+               if(param1.data.bTransferLockSettingAllowCraftingUse != undefined)
+               {
+                  m_bTransferLockSettingAllowCraftingUse = param1.data.bTransferLockSettingAllowCraftingUse;
+                  ConfirmPanelComponentEntry.bTransferLockSettingAllowCraftingUse = m_bTransferLockSettingAllowCraftingUse;
+                  ModListObject.RefreshList();
+                  RequirementsListObject.RefreshList();
+               }
                RenameButton.ButtonText = allowClearName ? "$CLEARNAME" : "$RENAME";
             }
          });
@@ -991,7 +999,6 @@ package
          this._isModeInitialized = true;
          this.inspectMode = false;
          this.SetCraftingHierarchy("$CRAFTING");
-         this.ModButton.ButtonText = "$Select";
          this.Build.ButtonText = this.strBuildButtonText;
          this.AutoBuild.ButtonText = this.strBuildButtonText;
          this.eMode = this.SLOTS_MODE;
@@ -1028,7 +1035,6 @@ package
          this.ModSlotBase_mc.visible = true;
          this.CurrentModsBase_mc.ModSlotList_mc.visible = false;
          this.SetCraftingHierarchy("$MODIFY");
-         this.ModButton.ButtonText = "$MODIFY";
          this.eMode = this.INVENTORY_MODE;
          this.BGSCodeObj.RemoveHighlight();
          this.ModListObject.SetInactive();
@@ -1088,9 +1094,7 @@ package
       private function PopulateButtonBar() : void
       {
          this.ItemLevelSelectButtons = new Vector.<BSButtonHintData>();
-         this.ItemLevelSelectButtons.push(this.ItemLevelAcceptButton);
          this.ItemLevelSelectButtons.push(this.ItemLevelCancelButton);
-         this.ItemLevelAcceptButton.ButtonVisible = false;
          this.ItemLevelCancelButton.ButtonVisible = false;
          this.ItemLevelSelectButtons.push(this.ToggleCraftingButton);
          this.ItemLevelSelectButtons.push(this.FilterCraftableButton);
@@ -1112,14 +1116,12 @@ package
          this.InventoryButtonHints.push(this.InspectRepairButton);
          this.InventoryButtonHints.push(this.zel_RepairButton);
          this.InventoryButtonHints.push(this.LockButton);
-         this.InventoryButtonHints.push(this.ModButton);
          this.InventoryButtonHints.push(this.ExitButton);
          this.InventoryButtonHints.push(this.AlternateButton);
          this.InventoryButtonHints.push(this.ToggleCraftingButton);
          this.InventoryButtonHints.push(this.FilterCraftableButton);
          this.InventoryButtonHints.push(this.FilterAtxButton);
          this.ModSlotButtonHints = new Vector.<BSButtonHintData>();
-         this.ModSlotButtonHints.push(this.ModButton);
          this.ModSlotButtonHints.push(this.BackButton);
          this.ModSlotButtonHints.push(this.AlternateButton);
          this.ModSlotButtonHints.push(this.ToggleCraftingButton);
@@ -1452,7 +1454,14 @@ package
                   this.ButtonHintBar_mc.SetButtonHintData(this.ComponentsListHints);
                   break;
                case this.LEVEL_SELECT_MODE:
-                  this.ButtonHintBar_mc.SetButtonHintData(this.ItemLevelSelectButtons);
+                  if(this.modalActive)
+                  {
+                     this.ButtonHintBar_mc.SetButtonHintData(this.QuantityButtons);
+                  }
+                  else
+                  {
+                     this.ButtonHintBar_mc.SetButtonHintData(this.ItemLevelSelectButtons);
+                  }
                   break;
                case this.ITEM_SELECT_MODE:
                   this.ButtonHintBar_mc.SetButtonHintData(this.MiscItemListHints);
@@ -1546,7 +1555,6 @@ package
                   this.AlternateButton.ButtonVisible = this.strAlternateButtonText.length > 0;
                   this.AlternateButton.ButtonText = this.strAlternateButtonText;
                   this.AlternateButton.ButtonEnabled = this.AternateTextEnabled;
-                  this.ModButton.ButtonEnabled = this.isCrafting || this.ModSlotListObject.entryList && this.ModSlotListObject.entryList.length > 0;
                   this.zel_RepairButton.ButtonVisible = this._improvedWorkbench.EnableQuickRepairButton && this._allowRepair;
                   if(this.zel_RepairButton.ButtonVisible)
                   {
@@ -1578,16 +1586,12 @@ package
                      }
                      this.LockButton.canHold = uiController != PlatformChangeEvent.PLATFORM_PC_KB_MOUSE;
                   }
-                  this.InspectRepairButton.ButtonVisible = this._allowRepair;
-                  this.ToggleEquipButton.ButtonVisible = this._allowEquip;
                }
                break;
             case this.SLOTS_MODE:
                this.AlternateButton.ButtonVisible = this.strAlternateButtonText.length > 0;
                this.AlternateButton.ButtonText = this.strAlternateButtonText;
                this.AlternateButton.ButtonEnabled = this.AternateTextEnabled;
-               this.ItemLevelAcceptButton.ButtonVisible = false;
-               this.ItemLevelCancelButton.ButtonVisible = false;
                break;
             case this.MOD_MODE:
                this.AutoBuild.ButtonVisible = true;
@@ -1616,7 +1620,6 @@ package
                this.AlternateButton.ButtonVisible = this.strAlternateButtonText.length > 0;
                this.AlternateButton.ButtonText = this.strAlternateButtonText;
                this.AlternateButton.ButtonEnabled = this.AternateTextEnabled;
-               this.ItemLevelAcceptButton.ButtonVisible = false;
                this.ItemLevelCancelButton.ButtonVisible = false;
                break;
             case this.REQUIREMENTS_MODE:
@@ -1626,7 +1629,6 @@ package
                this.ChooseComponents.ButtonEnabled = !this.ModSlotBase_mc.ModSlotList_mc.filterer.IsFilterEmpty(this.ModSlotBase_mc.ModSlotList_mc.filterer.itemFilter);
                break;
             case this.LEVEL_SELECT_MODE:
-               this.ItemLevelAcceptButton.ButtonVisible = true;
                this.ItemLevelCancelButton.ButtonVisible = true;
          }
          if(this.eMode == this.MOD_MODE)
@@ -2176,6 +2178,7 @@ package
             stage.focus = this.QuantityModal_mc;
             GlobalFunc.PlayMenuSound(GlobalFunc.MENU_SOUND_POPUP);
             this.updateModalActive();
+            this.SetButtonHintData();
             this.UpdateButtons();
          }
          else if(_loc1_ != null)
@@ -2186,6 +2189,7 @@ package
             stage.focus = this.QuantityModal_mc;
             GlobalFunc.PlayMenuSound(GlobalFunc.MENU_SOUND_POPUP);
             this.updateModalActive();
+            this.SetButtonHintData();
             this.UpdateButtons();
          }
       }

@@ -4,7 +4,7 @@ package
    import flash.display.MovieClip;
    import flash.events.Event;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol33")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol35")]
    public class RequirementList extends BSScrollingList
    {
       

@@ -5,7 +5,7 @@ package
    import flash.display.MovieClip;
    import flash.geom.ColorTransform;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol58")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol60")]
    public class ModPartListEntry extends BSScrollingListFadeEntry
    {
       

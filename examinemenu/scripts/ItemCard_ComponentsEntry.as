@@ -3,7 +3,7 @@ package
    import Shared.AS3.BSScrollingList;
    import flash.display.MovieClip;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol278")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol277")]
    public class ItemCard_ComponentsEntry extends ItemCard_Entry
    {
       

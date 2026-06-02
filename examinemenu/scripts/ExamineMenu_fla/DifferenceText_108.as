@@ -3,7 +3,7 @@ package ExamineMenu_fla
    import flash.display.MovieClip;
    import flash.text.TextField;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol101")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol100")]
    public dynamic class DifferenceText_108 extends MovieClip
    {
       

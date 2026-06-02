@@ -2,7 +2,7 @@ package
 {
    import Shared.AS3.BSScrollingListFadeEntry;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol28")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol30")]
    public class RequirementListEntry extends BSScrollingListFadeEntry
    {
       

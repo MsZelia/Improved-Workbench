@@ -2,7 +2,7 @@ package ExamineMenu_fla
 {
    import flash.display.MovieClip;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol138")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol137")]
    public dynamic class DamageIcons_109 extends MovieClip
    {
       

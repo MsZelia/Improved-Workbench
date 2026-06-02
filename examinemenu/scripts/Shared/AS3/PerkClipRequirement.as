@@ -5,7 +5,7 @@ package Shared.AS3
    import scaleform.gfx.Extensions;
    import scaleform.gfx.TextFieldEx;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol381")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol380")]
    public class PerkClipRequirement extends PerkClipBase
    {
       

@@ -3,7 +3,7 @@ package
    import Shared.AS3.BSScrollingListEntry;
    import Shared.DummyEntryList;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol386")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol385")]
    public class RightHandList extends DummyEntryList
    {
       

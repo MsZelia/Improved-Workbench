@@ -5,13 +5,17 @@ package
    import flash.display.MovieClip;
    import flash.text.TextField;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol24")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol26")]
    public class ModListEntry extends ItemListEntryBase
    {
+      
+      private static const ENTRY_BORDER_ALPHA:Number = 0.25;
       
       public var count:TextField;
       
       public var taggedIcon_mc:MovieClip;
+      
+      public var ItemLockIcon_mc:MovieClip;
       
       public function ModListEntry()
       {
@@ -38,8 +42,8 @@ package
          }
          if(param1.accountedFor != null && param1.requiredCount != null)
          {
-            _loc4_ = param1.text + " " + param1.accountedFor + "/" + param1.requiredCount;
-            _loc5_ = !(param1.betcText != true && param1.accountedFor < param1.requiredCount);
+            _loc4_ = param1.text + " " + (!ExamineMenu.TransferLockSettingAllowCraftingUse && param1.unlockedAccountedFor != null ? param1.unlockedAccountedFor : param1.accountedFor) + "/" + param1.requiredCount;
+            _loc5_ = !(param1.betcText != true && (!ExamineMenu.TransferLockSettingAllowCraftingUse && param1.unlockedAccountedFor != null ? param1.unlockedAccountedFor : param1.accountedFor) < param1.requiredCount);
          }
          else
          {
@@ -69,11 +73,20 @@ package
                GlobalFunc.SetText(textField,param1.count > 1 ? _loc4_ + " (" + param1.count + ")" : _loc4_,false);
             }
          }
+         var _loc6_:Boolean = false;
+         if(!ExamineMenu.TransferLockSettingAllowCraftingUse && param1.isTransferLocked && param1.accountedFor != null && param1.unlockedAccountedFor != null && param1.requiredCount != null)
+         {
+            _loc6_ = param1.unlockedAccountedFor < param1.requiredCount && param1.accountedFor >= param1.requiredCount;
+         }
          if(!_loc5_)
          {
             textField.textColor = 5661031;
          }
          else
+         {
+            textField.textColor = 16777163;
+         }
+         if(param1 != null && param1.isTransferLocked && !ExamineMenu.TransferLockSettingAllowCraftingUse)
          {
             textField.textColor = 16777163;
          }
@@ -85,7 +98,11 @@ package
          {
             this.taggedIcon_mc.visible = false;
          }
-         border.alpha = 0.25;
+         if(this.ItemLockIcon_mc != null)
+         {
+            this.ItemLockIcon_mc.visible = param1 != null && Boolean(param1.isTransferLocked) && !ExamineMenu.TransferLockSettingAllowCraftingUse;
+         }
+         border.alpha = ENTRY_BORDER_ALPHA;
       }
    }
 }

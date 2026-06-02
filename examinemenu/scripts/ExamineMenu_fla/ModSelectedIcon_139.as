@@ -2,7 +2,7 @@ package ExamineMenu_fla
 {
    import flash.display.MovieClip;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol57")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol59")]
    public dynamic class ModSelectedIcon_139 extends MovieClip
    {
       

@@ -10,9 +10,11 @@ package
    import scaleform.gfx.Extensions;
    import scaleform.gfx.TextFieldEx;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol312")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol311")]
    public class ConfirmPanel extends MovieClip
    {
+      
+      private static const LOCKED_REPAIR_FAILURE_MESSAGE:String = "$CannotCraftMaterialsLocked";
       
       public var ButtonHintBar_mc:BSButtonHintBar;
       
@@ -151,28 +153,44 @@ package
          this.CancelButton.ButtonVisible = param1;
       }
       
-      public function AddComponentSource(param1:String, param2:uint, param3:String, param4:uint, param5:uint = 4294967295, param6:Boolean = false, param7:uint = 0) : *
+      public function AddComponentSource(param1:String, param2:uint, param3:String, param4:uint, param5:uint = 4294967295, param6:Boolean = false, param7:uint = 0, param8:uint = 4294967295, param9:Boolean = false) : *
       {
-         var _loc8_:* = null;
-         var _loc9_:* = this.m_Entries.length;
-         var _loc10_:* = 0;
-         while(_loc10_ < _loc9_)
+         var _loc14_:ConfirmPanelComponentEntry = null;
+         var _loc10_:* = null;
+         var _loc11_:* = this.m_Entries.length;
+         var _loc12_:* = 0;
+         while(_loc12_ < _loc11_)
          {
-            if(this.m_Entries[_loc10_].itemName == param1)
+            if(this.m_Entries[_loc12_].itemName == param1)
             {
-               _loc8_ = this.m_Entries[_loc10_];
+               _loc10_ = this.m_Entries[_loc12_];
                break;
             }
-            _loc10_++;
+            _loc12_++;
          }
-         if(_loc8_ == null)
+         if(_loc10_ == null)
          {
-            _loc8_ = new ConfirmPanelComponentSourceEntry(param1);
-            addChild(_loc8_);
-            this.m_Entries.push(_loc8_);
+            _loc10_ = new ConfirmPanelComponentSourceEntry(param1);
+            addChild(_loc10_);
+            this.m_Entries.push(_loc10_);
          }
-         _loc8_.itemCount = Math.max(param2,_loc8_.itemCount);
-         _loc8_.AddComponent(param3,param4,param5,param6,param7);
+         _loc10_.itemCount = Math.max(param2,_loc10_.itemCount);
+         _loc10_.AddComponent(param3,param4,param5,param6,param7);
+         var _loc13_:int = _loc10_.numChildren - 1;
+         while(_loc13_ >= 0)
+         {
+            if(_loc10_.getChildAt(_loc13_) is ConfirmPanelComponentEntry)
+            {
+               _loc14_ = _loc10_.getChildAt(_loc13_) as ConfirmPanelComponentEntry;
+               if(_loc14_.componentName == param3)
+               {
+                  _loc14_.unlockedAccountedFor = param8;
+                  _loc14_.isTransferLocked = param9;
+                  break;
+               }
+            }
+            _loc13_--;
+         }
       }
       
       public function Build() : *

@@ -8,7 +8,7 @@ package
    import flash.geom.Rectangle;
    import flash.ui.Keyboard;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol325")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol324")]
    public class Option_Scrollbar extends MovieClip
    {
       

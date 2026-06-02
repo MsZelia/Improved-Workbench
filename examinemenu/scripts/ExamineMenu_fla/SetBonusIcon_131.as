@@ -2,7 +2,7 @@ package ExamineMenu_fla
 {
    import flash.display.MovieClip;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol80")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol82")]
    public dynamic class SetBonusIcon_131 extends MovieClip
    {
       

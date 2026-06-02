@@ -5,7 +5,7 @@ package
    import flash.events.Event;
    import scaleform.gfx.TextFieldEx;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol373")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol372")]
    public class LegendaryCraftingFanfare extends MovieClip
    {
       

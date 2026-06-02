@@ -2,7 +2,7 @@ package ExamineMenu_fla
 {
    import flash.display.MovieClip;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol112")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol111")]
    public dynamic class DifferenceSymbol_82 extends MovieClip
    {
       

@@ -3,7 +3,7 @@ package ExamineMenu_fla
    import flash.display.MovieClip;
    import flash.events.Event;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol372")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol371")]
    public dynamic class NEWAnim_49 extends MovieClip
    {
       

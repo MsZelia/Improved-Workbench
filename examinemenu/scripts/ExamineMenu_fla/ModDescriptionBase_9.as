@@ -3,7 +3,7 @@ package ExamineMenu_fla
    import flash.display.MovieClip;
    import flash.text.TextField;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol415")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol414")]
    public dynamic class ModDescriptionBase_9 extends MovieClip
    {
       

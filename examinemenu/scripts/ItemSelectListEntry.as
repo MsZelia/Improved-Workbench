@@ -3,7 +3,7 @@ package
    import Shared.AS3.BSScrollingListFadeEntry;
    import flash.text.TextField;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol44")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol46")]
    public class ItemSelectListEntry extends BSScrollingListFadeEntry
    {
       

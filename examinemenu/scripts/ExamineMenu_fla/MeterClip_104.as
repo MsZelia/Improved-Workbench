@@ -2,7 +2,7 @@ package ExamineMenu_fla
 {
    import flash.display.MovieClip;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol150")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol149")]
    public dynamic class MeterClip_104 extends MovieClip
    {
       

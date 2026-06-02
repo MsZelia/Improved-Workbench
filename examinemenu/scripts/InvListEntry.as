@@ -6,7 +6,7 @@ package
    import flash.filters.BitmapFilterQuality;
    import flash.filters.DropShadowFilter;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol86")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol85")]
    public class InvListEntry extends ItemListEntryBase
    {
       

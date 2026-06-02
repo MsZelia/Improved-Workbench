@@ -1,6 +1,6 @@
 package
 {
-   [Embed(source="/_assets/assets.swf", symbol="symbol259")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol258")]
    public class ItemCard_HideDifferenceEntry extends ItemCard_Entry
    {
       
