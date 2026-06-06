@@ -22,7 +22,7 @@ package
       
       private static const MAX_CRAFTABLE:uint = 255;
       
-      public static const VERSION:String = "1.8.2";
+      public static const VERSION:String = "1.9.0";
       
       public static const MOD_NAME:String = "ImprovedWorkbench";
       
@@ -89,6 +89,10 @@ package
       private var CustomWorkbenchRepairHotkey:int = 0;
       
       private var CustomRepairKitRepairHotkey:int = 0;
+      
+      public var LastSelectedCategory:String = "";
+      
+      public var LastSelectedItem:String = "";
       
       public function ImprovedWorkbench(examineMenu:Object)
       {
@@ -299,6 +303,39 @@ package
          {
             BSUIDataManager.Subscribe("PlayerInventoryData",mapInventory);
          }
+      }
+      
+      public function getCustomCraftQuantity() : uint
+      {
+         if(_config && _config.customCraftAmount && _config.customCraftAmount.enabled)
+         {
+            if(LastSelectedItem && LastSelectedCategory)
+            {
+               var customQuantity:uint = 1;
+               for(configItemName in _config.customCraftAmount.itemNames)
+               {
+                  var regex:RegExp = new RegExp(configItemName,"i");
+                  if(regex.test(LastSelectedItem))
+                  {
+                     customQuantity = uint(_config.customCraftAmount.itemNames[configItemName]);
+                     this._examineMenu.displayError("SET CustomCraftQuantity for itemName(" + configItemName + "): " + LastSelectedCategory + " > " + LastSelectedItem + " : " + customQuantity);
+                     return customQuantity;
+                  }
+               }
+               for(configCatName in _config.customCraftAmount.categoryNames)
+               {
+                  regex = new RegExp(configCatName,"i");
+                  if(regex.test(LastSelectedCategory))
+                  {
+                     customQuantity = uint(_config.customCraftAmount.categoryNames[configCatName]);
+                     this._examineMenu.displayError("SET CustomCraftQuantity for categoryName(" + configCatName + "): " + LastSelectedCategory + " > " + LastSelectedItem + " : " + customQuantity);
+                     return customQuantity;
+                  }
+               }
+               this._examineMenu.displayError("CustomCraftQuantity NOT FOUND for: " + LastSelectedCategory + " > " + LastSelectedItem);
+            }
+         }
+         return DefaultCraftAmount;
       }
       
       private function useRepairKit() : void

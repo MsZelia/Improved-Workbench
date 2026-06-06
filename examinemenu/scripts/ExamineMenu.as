@@ -328,6 +328,8 @@ package
       
       private var errorMessage:TextField;
       
+      private var clearTimer:Timer = new Timer(7500,1);
+      
       public var __SFCodeObj:Object = new Object();
       
       public function ExamineMenu()
@@ -423,11 +425,16 @@ package
          this.errorMessage.mouseEnabled = true;
          this.errorMessage.visible = false;
          addChild(this.errorMessage);
+         this.clearTimer.addEventListener(TimerEvent.TIMER,this.clearMessages,false,0,true);
+      }
+      
+      private function clearMessages() : void
+      {
+         errorMessage.text = "";
       }
       
       public function displayError(param1:*, clear:Boolean = false) : void
       {
-         var str:String;
          if(!ImprovedWorkbench.Debug)
          {
             return;
@@ -438,7 +445,7 @@ package
          }
          if(param1 is String)
          {
-            str = param1;
+            var str:String = param1;
          }
          else
          {
@@ -447,14 +454,8 @@ package
          GlobalFunc.SetText(this.errorMessage,this.errorMessage.text + "\n" + str);
          this.errorMessage.visible = true;
          this.errorMessage.scrollV = this.errorMessage.maxScrollV;
-         setTimeout(function():void
-         {
-            var split:Array = errorMessage.text.split("\n");
-            if(split.length > 0)
-            {
-               GlobalFunc.SetText(errorMessage,split.slice(1).join("\n"));
-            }
-         },7000);
+         this.clearTimer.reset();
+         this.clearTimer.start();
       }
       
       public function AddRotateButtons() : *
@@ -1161,8 +1162,13 @@ package
       
       public function FillPossibleModPartArray(param1:Event) : *
       {
+         if(this._improvedWorkbench)
+         {
+            this._improvedWorkbench.LastSelectedCategory = this.ModSlotListObject.selectedEntry.text;
+         }
          if(ImprovedWorkbench.DEBUG_SELECTION)
          {
+            displayError("this.ModSlotListObject.selectedEntry");
             displayError(this.ModSlotListObject.selectedEntry);
          }
          if(this.ModSlotListObject.selectedIndex > -1 && this.ModListObject.entryList)
@@ -1185,8 +1191,13 @@ package
       {
          var textIds:String;
          var _loc1_:Array;
+         if(this._improvedWorkbench)
+         {
+            this._improvedWorkbench.LastSelectedItem = this.ModListObject.selectedEntry.text;
+         }
          if(ImprovedWorkbench.DEBUG_SELECTION)
          {
+            displayError("this.ModListObject.selectedEntry");
             displayError(this.ModListObject.selectedEntry);
             textIds = "";
             this.ModListObject.selectedEntry.text.split("").forEach(function(x:String):void
@@ -1306,6 +1317,7 @@ package
       {
          if(ImprovedWorkbench.DEBUG_SELECTION)
          {
+            displayError("this.InventoryBase_mc.InventoryList_mc.selectedEntry");
             displayError(this.InventoryBase_mc.InventoryList_mc.selectedEntry);
          }
          if(!this._isCookingMenu)
@@ -2173,7 +2185,7 @@ package
          {
             this.QuantityModal_mc.tooltip = "";
             _loc2_ = GlobalFunc.Clamp(this.RequirementsListObject.craftableQuantity,1,this.MAX_CRAFTABLE);
-            amount = GlobalFunc.Clamp(this._improvedWorkbench.DefaultCraftAmount,1,_loc2_);
+            amount = GlobalFunc.Clamp(this._improvedWorkbench.getCustomCraftQuantity(),1,_loc2_);
             this.QuantityModal_mc.OpenMenuRange(stage.focus,"$SETQUANTITY",1,_loc2_,amount,0,true);
             stage.focus = this.QuantityModal_mc;
             GlobalFunc.PlayMenuSound(GlobalFunc.MENU_SOUND_POPUP);
@@ -2184,7 +2196,7 @@ package
          else if(_loc1_ != null)
          {
             this.QuantityModal_mc.tooltip = "";
-            amount = Math.min(this._improvedWorkbench.DefaultCraftAmount,_loc1_.count);
+            amount = Math.min(this._improvedWorkbench.getCustomCraftQuantity(),_loc1_.count);
             this.QuantityModal_mc.OpenMenuRange(stage.focus,"$SETQUANTITY",1,_loc1_.count,amount,0,true);
             stage.focus = this.QuantityModal_mc;
             GlobalFunc.PlayMenuSound(GlobalFunc.MENU_SOUND_POPUP);
