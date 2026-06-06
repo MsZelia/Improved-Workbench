@@ -5,6 +5,23 @@
 	"enableQuickRepairButton": true,
 	"enableImprovedQuantityMenu": true,
 	"defaultCraftAmount": 1,
+	"customCraftAmount": {
+		"enabled": false,
+		"itemNames": {
+			"fish bits": 255
+		},
+		"categoryNames": {
+			"ALL FOOD": 255,
+			"ALL DRINKS": 255,
+			"MEAT": 255,
+			"PLANTS": 255,
+			"PREPARED": 255,
+			"BEERS": 255,
+			"SPIRITS": 255,
+			"WINES": 255,
+			"MIXED DRINKS": 255
+		}
+	},
 	"showInventoryItemCount": true,
 	"showInventoryComponentsCount": true,
 	"customRepairKitRepairHotkey": 0,
