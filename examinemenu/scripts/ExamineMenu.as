@@ -1162,7 +1162,7 @@ package
       
       public function FillPossibleModPartArray(param1:Event) : *
       {
-         if(this._improvedWorkbench)
+         if(this._improvedWorkbench && this.ModSlotListObject.selectedEntry)
          {
             this._improvedWorkbench.LastSelectedCategory = this.ModSlotListObject.selectedEntry.text;
          }
@@ -1191,7 +1191,7 @@ package
       {
          var textIds:String;
          var _loc1_:Array;
-         if(this._improvedWorkbench)
+         if(this._improvedWorkbench && this.ModListObject.selectedEntry)
          {
             this._improvedWorkbench.LastSelectedItem = this.ModListObject.selectedEntry.text;
          }
