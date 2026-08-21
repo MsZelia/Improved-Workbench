@@ -22,7 +22,7 @@ package
       
       private static const MAX_CRAFTABLE:uint = 255;
       
-      public static const VERSION:String = "1.9.3";
+      public static const VERSION:String = "1.9.4";
       
       public static const MOD_NAME:String = "ImprovedWorkbench";
       
@@ -226,47 +226,70 @@ package
       
       private function loadConfig() : void
       {
+         var loaderError:Function;
          var loaderComplete:Function;
          var url:URLRequest = null;
          var loader:URLLoader = null;
          try
          {
+            loaderError = function(e:IOErrorEvent):void
+            {
+               Debug = true;
+               _examineMenu.displayError("Error loading config: " + e.text);
+            };
             loaderComplete = function(param1:Event):void
             {
-               var _loc2_:Object = new JSONDecoder(loader.data,true).getValue();
-               _config = _loc2_;
-               ShowDurability = Boolean(_config.showDurabilityValue);
-               EnableRepairAll = Boolean(_config.enableExamineRepairAll);
-               EnableQuickRepairButton = Boolean(_config.enableQuickRepairButton);
-               ImprovedQuantityMenu = Boolean(_config.enableImprovedQuantityMenu);
-               ShowInventoryItemCount = Boolean(_config.showInventoryItemCount);
-               ShowInventoryComponentsCount = Boolean(_config.showInventoryComponentsCount);
-               Debug = Boolean(_config.debug);
-               DEBUG_SELECTION = Boolean(_config.debugSelection);
-               if(_config.defaultCraftAmount && !isNaN(_config.defaultCraftAmount))
+               var _loc2_:Object;
+               var line:uint;
+               try
                {
-                  DefaultCraftAmount = GlobalFunc.Clamp(uint(_config.defaultCraftAmount),1,MAX_CRAFTABLE);
+                  _loc2_ = new JSONDecoder(loader.data,false).getValue();
+                  _config = _loc2_;
+                  ShowDurability = Boolean(_config.showDurabilityValue);
+                  EnableRepairAll = Boolean(_config.enableExamineRepairAll);
+                  EnableQuickRepairButton = Boolean(_config.enableQuickRepairButton);
+                  ImprovedQuantityMenu = Boolean(_config.enableImprovedQuantityMenu);
+                  ShowInventoryItemCount = Boolean(_config.showInventoryItemCount);
+                  ShowInventoryComponentsCount = Boolean(_config.showInventoryComponentsCount);
+                  Debug = Boolean(_config.debug);
+                  DEBUG_SELECTION = Boolean(_config.debugSelection);
+                  if(_config.defaultCraftAmount && !isNaN(_config.defaultCraftAmount))
+                  {
+                     DefaultCraftAmount = GlobalFunc.Clamp(uint(_config.defaultCraftAmount),1,MAX_CRAFTABLE);
+                  }
+                  initPerkCardsConfig(null);
+                  if(_config.customRepairKitRepairHotkey && !isNaN(_config.customRepairKitRepairHotkey))
+                  {
+                     CustomRepairKitRepairHotkey = int(_config.customRepairKitRepairHotkey);
+                  }
+                  if(_config.customWorkbenchRepairHotkey && !isNaN(_config.customWorkbenchRepairHotkey))
+                  {
+                     CustomWorkbenchRepairHotkey = int(_config.customWorkbenchRepairHotkey);
+                  }
+                  _examineMenu.displayError(MOD_NAME + " " + VERSION + " Config file loaded");
+                  init();
+                  _examineMenu.displayError("Initialized");
+                  if(!_config.hideLoadMessage)
+                  {
+                     ShowMessage("Config file loaded!");
+                  }
                }
-               initPerkCardsConfig(null);
-               if(_config.customRepairKitRepairHotkey && !isNaN(_config.customRepairKitRepairHotkey))
+               catch(e:JSONParseError)
                {
-                  CustomRepairKitRepairHotkey = int(_config.customRepairKitRepairHotkey);
+                  Debug = true;
+                  line = e.text.substr(0,e.location).match(/\n/g).length + 1;
+                  _examineMenu.displayError("Error parsing config: " + e.message + " in line " + line);
                }
-               if(_config.customWorkbenchRepairHotkey && !isNaN(_config.customWorkbenchRepairHotkey))
+               catch(e:Error)
                {
-                  CustomWorkbenchRepairHotkey = int(_config.customWorkbenchRepairHotkey);
-               }
-               _examineMenu.displayError(MOD_NAME + " " + VERSION + " Config file loaded");
-               init();
-               _examineMenu.displayError("Initialized");
-               if(!_config.hideLoadMessage)
-               {
-                  ShowMessage("Config file loaded!");
+                  Debug = true;
+                  _examineMenu.displayError("Error initializing config: " + e);
                }
             };
             url = new URLRequest(CONFIG_FILE_LOCATION);
             loader = new URLLoader();
             loader.load(url);
+            loader.addEventListener(IOErrorEvent.IO_ERROR,loaderError);
             loader.addEventListener(Event.COMPLETE,loaderComplete);
          }
          catch(e:Error)
