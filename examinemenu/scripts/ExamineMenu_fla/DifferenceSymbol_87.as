@@ -3,10 +3,10 @@ package ExamineMenu_fla
    import flash.display.MovieClip;
    
    [Embed(source="/_assets/assets.swf", symbol="symbol111")]
-   public dynamic class DifferenceSymbol_82 extends MovieClip
+   public dynamic class DifferenceSymbol_87 extends MovieClip
    {
       
-      public function DifferenceSymbol_82()
+      public function DifferenceSymbol_87()
       {
          super();
          addFrameScript(0,this.frame1,1,this.frame2,2,this.frame3,3,this.frame4);

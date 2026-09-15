@@ -26,7 +26,7 @@ package
    import flash.utils.*;
    import flash.xml.*;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol396")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol401")]
    public dynamic class FeaturedItemVaultboy extends VaultBoyImageLoader
    {
       

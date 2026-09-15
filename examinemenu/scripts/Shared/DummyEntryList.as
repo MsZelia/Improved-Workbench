@@ -105,8 +105,9 @@ package Shared
       
       protected function AddDummyEntry() : void
       {
+         var _loc1_:BSScrollingListEntry = null;
          var _loc2_:Object = null;
-         var _loc1_:BSScrollingListEntry = GetClipByIndex(0);
+         _loc1_ = GetClipByIndex(0);
          if(_loc1_)
          {
             _loc2_ = new Object();

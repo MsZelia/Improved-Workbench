@@ -3,10 +3,10 @@ package ExamineMenu_fla
    import flash.display.MovieClip;
    
    [Embed(source="/_assets/assets.swf", symbol="symbol137")]
-   public dynamic class DamageIcons_109 extends MovieClip
+   public dynamic class DamageIcons_114 extends MovieClip
    {
       
-      public function DamageIcons_109()
+      public function DamageIcons_114()
       {
          super();
          addFrameScript(0,this.frame1);

@@ -4,12 +4,12 @@ package ExamineMenu_fla
    import flash.text.TextField;
    
    [Embed(source="/_assets/assets.swf", symbol="symbol300")]
-   public dynamic class ValueText_mc_81 extends MovieClip
+   public dynamic class ValueText_mc_86 extends MovieClip
    {
       
       public var ValueText_tf:TextField;
       
-      public function ValueText_mc_81()
+      public function ValueText_mc_86()
       {
          super();
          addFrameScript(0,this.frame1,1,this.frame2);

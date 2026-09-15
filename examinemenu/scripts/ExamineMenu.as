@@ -30,7 +30,7 @@ package
    import scaleform.gfx.Extensions;
    import scaleform.gfx.TextFieldEx;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol442")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol447")]
    public class ExamineMenu extends IMenu
    {
       
@@ -594,12 +594,12 @@ package
          this.KnownModsInfo_mc.KnownModsInfo_tf.visible = !this.isCrafting && (this._eMode == this.INVENTORY_MODE || this._eMode == this.SLOTS_MODE || this._eMode == this.MOD_MODE);
       }
       
-      private function get eMode() : *
+      public function get eMode() : *
       {
          return this._eMode;
       }
       
-      private function set eMode(param1:uint) : *
+      public function set eMode(param1:uint) : *
       {
          this._eMode = param1;
          this.SetButtonHintData();
@@ -938,9 +938,9 @@ package
          BSUIDataManager.dispatchEvent(new CustomEvent(EVENT_IS_CRAFTING,{"isCrafting":this.m_IsCrafting}));
       }
       
-      public function DisplayLegendaryFanfare(param1:String, param2:Boolean) : void
+      public function DisplayLegendaryFanfare(param1:String) : void
       {
-         this.LegendaryCraftingFanfare_mc.ShowFanfare(param1,param2);
+         this.LegendaryCraftingFanfare_mc.ShowFanfare(param1);
       }
       
       public function GoBackToMod() : void
@@ -1095,11 +1095,11 @@ package
       private function PopulateButtonBar() : void
       {
          this.ItemLevelSelectButtons = new Vector.<BSButtonHintData>();
-         this.ItemLevelSelectButtons.push(this.ItemLevelCancelButton);
-         this.ItemLevelCancelButton.ButtonVisible = false;
          this.ItemLevelSelectButtons.push(this.ToggleCraftingButton);
          this.ItemLevelSelectButtons.push(this.FilterCraftableButton);
          this.ItemLevelSelectButtons.push(this.FilterAtxButton);
+         this.ItemLevelSelectButtons.push(this.ItemLevelCancelButton);
+         this.ItemLevelCancelButton.ButtonVisible = false;
          this.InspectModeButtons = new Vector.<BSButtonHintData>();
          this.InspectModeButtons.push(this.RenameButton);
          this.InspectModeButtons.push(this.TakeButton);
@@ -1117,35 +1117,35 @@ package
          this.InventoryButtonHints.push(this.InspectRepairButton);
          this.InventoryButtonHints.push(this.zel_RepairButton);
          this.InventoryButtonHints.push(this.LockButton);
-         this.InventoryButtonHints.push(this.ExitButton);
          this.InventoryButtonHints.push(this.AlternateButton);
          this.InventoryButtonHints.push(this.ToggleCraftingButton);
          this.InventoryButtonHints.push(this.FilterCraftableButton);
          this.InventoryButtonHints.push(this.FilterAtxButton);
+         this.InventoryButtonHints.push(this.ExitButton);
          this.ModSlotButtonHints = new Vector.<BSButtonHintData>();
-         this.ModSlotButtonHints.push(this.BackButton);
          this.ModSlotButtonHints.push(this.AlternateButton);
          this.ModSlotButtonHints.push(this.ToggleCraftingButton);
          this.ModSlotButtonHints.push(this.FilterCraftableButton);
          this.ModSlotButtonHints.push(this.FilterAtxButton);
+         this.ModSlotButtonHints.push(this.BackButton);
          this.ModsListHints = new Vector.<BSButtonHintData>();
          this.ModsListHints.push(this.AutoBuild);
          this.ModsListHints.push(this.TagButton);
-         this.ModsListHints.push(this.BackButton);
          this.ModsListHints.push(this.AlternateButton);
          this.ModsListHints.push(this.ToggleCraftingButton);
          this.ModsListHints.push(this.FilterCraftableButton);
          this.ModsListHints.push(this.FilterAtxButton);
+         this.ModsListHints.push(this.BackButton);
          this.ComponentsListHints = new Vector.<BSButtonHintData>();
          this.ComponentsListHints.push(this.Build);
          this.ComponentsListHints.push(this.ChooseComponents);
          this.ComponentsListHints.push(this.BackButton);
          this.MiscItemListHints = new Vector.<BSButtonHintData>();
          this.MiscItemListHints.push(this.Add);
-         this.MiscItemListHints.push(this.BackButton);
          this.MiscItemListHints.push(this.ToggleCraftingButton);
          this.MiscItemListHints.push(this.FilterCraftableButton);
          this.MiscItemListHints.push(this.FilterAtxButton);
+         this.MiscItemListHints.push(this.BackButton);
          this.QuantityButtons = new Vector.<BSButtonHintData>();
          this.QuantityButtons.push(this.QuantityAcceptButton);
          this.QuantityButtons.push(this.QuantityCancelButton);

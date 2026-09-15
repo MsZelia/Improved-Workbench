@@ -2,13 +2,11 @@ package ExamineMenu_fla
 {
    import flash.display.MovieClip;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol249")]
-   public dynamic class colorConditionMeter_103 extends MovieClip
+   [Embed(source="/_assets/assets.swf", symbol="symbol19")]
+   public dynamic class List2Icon_160 extends MovieClip
    {
       
-      public var MeterClip_mc:MovieClip;
-      
-      public function colorConditionMeter_103()
+      public function List2Icon_160()
       {
          super();
          addFrameScript(0,this.frame1);

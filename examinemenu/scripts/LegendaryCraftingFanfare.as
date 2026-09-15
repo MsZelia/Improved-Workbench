@@ -1,11 +1,12 @@
 package
 {
+   import Shared.AS3.BSAsync;
    import Shared.GlobalFunc;
    import flash.display.MovieClip;
    import flash.events.Event;
    import scaleform.gfx.TextFieldEx;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol372")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol377")]
    public class LegendaryCraftingFanfare extends MovieClip
    {
       
@@ -31,23 +32,17 @@ package
       
       private const FANFARE_DISPLAYED:String = "ExamineMenu::DisplayNextAttribute";
       
-      private const ROLL_ON_LENGTH:uint = 3000;
-      
-      private const FOUR_STAR_CLIP_INDEX:uint = 3;
-      
       private var m_AttributeClips:Vector.<MovieClip>;
       
       private var m_TopAttributeClips:Vector.<MovieClip>;
       
       private var m_AttributeText:Array;
       
-      private var m_FanfareEventType:String = "";
+      private var m_NextAttribute:uint = 0;
       
-      private var m_nextAttribute:uint = 0;
+      private var m_ShardStarCount:uint = 0;
       
-      private var m_starCount:uint = 0;
-      
-      private var m_IsFourStarFanfare:Boolean = false;
+      private var m_IsLegendaryMod:Boolean = false;
       
       public function LegendaryCraftingFanfare()
       {
@@ -55,75 +50,143 @@ package
          addFrameScript(0,this.frame1,1,this.frame2,85,this.frame86);
          this.m_AttributeClips = new <MovieClip>[this.Attribute1_mc,this.Attribute2_mc,this.Attribute3_mc,this.Attribute4_mc,this.Attribute5_mc];
          this.m_TopAttributeClips = new <MovieClip>[this.Attribute1_mc,this.TopAttribute2_mc,this.TopAttribute3_mc,this.TopAttribute4_mc,this.TopAttribute5_mc];
-         this.m_AttributeText = new Array();
-         TextFieldEx.setTextAutoSize(this.Attribute1_mc.AttributeText_mc.Attribute_tf,TextFieldEx.TEXTAUTOSZ_SHRINK);
-         TextFieldEx.setTextAutoSize(this.Attribute2_mc.AttributeText_mc.Attribute_tf,TextFieldEx.TEXTAUTOSZ_SHRINK);
-         TextFieldEx.setTextAutoSize(this.Attribute3_mc.AttributeText_mc.Attribute_tf,TextFieldEx.TEXTAUTOSZ_SHRINK);
-         TextFieldEx.setTextAutoSize(this.Attribute4_mc.AttributeText_mc.Attribute_tf,TextFieldEx.TEXTAUTOSZ_SHRINK);
-         TextFieldEx.setTextAutoSize(this.Attribute5_mc.AttributeText_mc.Attribute_tf,TextFieldEx.TEXTAUTOSZ_SHRINK);
+         var _loc1_:* = this.m_AttributeClips.length;
+         var _loc2_:int = 0;
+         while(_loc2_ < _loc1_)
+         {
+            TextFieldEx.setTextAutoSize(this.m_TopAttributeClips[_loc2_].AttributeText_mc.Attribute_tf,TextFieldEx.TEXTAUTOSZ_SHRINK);
+            TextFieldEx.setTextAutoSize(this.m_AttributeClips[_loc2_].AttributeText_mc.Attribute_tf,TextFieldEx.TEXTAUTOSZ_SHRINK);
+            _loc2_++;
+         }
       }
       
-      public function ShowFanfare(param1:String, param2:Boolean) : void
+      private function checkStarCount(param1:String) : int
       {
-         var _loc5_:int = 0;
-         removeEventListener(this.FANFARE_DISPLAYED,this.DisplayNextAttribute);
-         var _loc3_:Array = param1.split(/\r|\n/);
-         this.m_AttributeText = _loc3_;
-         this.m_nextAttribute = 0;
-         this.ClearAnim();
-         this.m_IsFourStarFanfare = param2;
-         this.m_starCount = 0;
-         var _loc4_:int = 0;
-         while(_loc4_ < param1.length)
+         var _loc2_:RegExp = /[¬]/g;
+         return param1.match(_loc2_).length;
+      }
+      
+      private function sortAttribute(param1:String, param2:String) : int
+      {
+         var _loc6_:int = 0;
+         var _loc7_:int = 0;
+         var _loc3_:int = 0;
+         var _loc4_:* = param1.indexOf("§") != -1;
+         var _loc5_:* = param2.indexOf("§") != -1;
+         if(_loc4_ && !_loc5_)
          {
-            _loc5_ = int(param1.charCodeAt(_loc4_).toString(16));
-            if(_loc5_ == -54)
+            _loc3_ = 1;
+         }
+         else if(!_loc4_ && _loc5_)
+         {
+            _loc3_ = -1;
+         }
+         else
+         {
+            _loc6_ = this.checkStarCount(param1);
+            _loc7_ = this.checkStarCount(param2);
+            if(_loc6_ < _loc7_)
             {
-               ++this.m_starCount;
+               _loc3_ = -1;
             }
-            else if(_loc5_ == 20 || _loc5_ == 0)
+            else if(_loc6_ > _loc7_)
+            {
+               _loc3_ = 1;
+            }
+         }
+         return _loc3_;
+      }
+      
+      public function ShowFanfare(param1:String) : void
+      {
+         var _loc3_:int = 0;
+         removeEventListener(this.FANFARE_DISPLAYED,this.displayNextAttribute);
+         this.clearAnim();
+         this.m_NextAttribute = 0;
+         this.m_ShardStarCount = 0;
+         var _loc2_:int = 0;
+         while(_loc2_ < param1.length)
+         {
+            _loc3_ = int(param1.charCodeAt(_loc2_).toString(16));
+            if(_loc3_ == -54)
+            {
+               ++this.m_ShardStarCount;
+            }
+            else if(_loc3_ == 20 || _loc3_ == 0)
             {
                break;
             }
-            _loc4_++;
+            _loc2_++;
          }
-         if(this.m_starCount > 0)
+         this.m_IsLegendaryMod = this.m_ShardStarCount > 0;
+         if(this.m_IsLegendaryMod)
          {
-            this.m_AttributeText[0] = param1.slice(this.m_starCount + 1,param1.length);
+            this.m_AttributeText = new Array(1);
+            this.m_AttributeText[0] = param1.slice(this.m_ShardStarCount + 1,param1.length);
          }
-         if(_loc3_.length > 0 && _loc3_[0] != "")
+         else
          {
-            addEventListener(this.FANFARE_DISPLAYED,this.DisplayNextAttribute);
+            this.m_AttributeText = param1.split(/\r|\n/);
+            if(this.m_AttributeText[this.m_AttributeText.length - 1] == "")
+            {
+               this.m_AttributeText.pop();
+            }
+            this.m_AttributeText.sort(this.sortAttribute);
+         }
+         if(this.m_AttributeText.length > 0 && this.m_AttributeText[0] != "")
+         {
+            addEventListener(this.FANFARE_DISPLAYED,this.displayNextAttribute);
             gotoAndPlay("rollOn");
             this.NewAnim_mc.gotoAndPlay("rollOn");
          }
       }
       
-      private function DisplayNextAttribute(param1:Event) : void
+      private function getCurrentAttribute() : MovieClip
       {
-         if(this.m_starCount > 0 && this.m_starCount < this.m_TopAttributeClips.length)
+         var _loc1_:MovieClip = null;
+         if(this.m_ShardStarCount > 0 && this.m_ShardStarCount - 1 < this.m_TopAttributeClips.length)
          {
-            this.m_TopAttributeClips[this.m_starCount - 1].AttributeText_mc.Attribute_tf.text = this.m_AttributeText[0];
-            this.m_TopAttributeClips[this.m_starCount - 1].gotoAndPlay("rollOn");
-            GlobalFunc.PlayMenuSound("UIFanfareLegendaryCrafted0" + this.m_starCount);
-            this.m_starCount = 0;
-            this.m_nextAttribute = this.m_AttributeText.length;
+            _loc1_ = this.m_TopAttributeClips[this.m_ShardStarCount - 1];
          }
-         else if(this.m_starCount == 0 && this.m_nextAttribute < this.m_AttributeClips.length && this.m_nextAttribute < this.m_AttributeText.length && this.m_AttributeText[this.m_nextAttribute] != "")
+         else if(this.m_ShardStarCount == 0 && this.m_NextAttribute < this.m_AttributeClips.length && this.m_NextAttribute < this.m_AttributeText.length)
          {
-            this.m_AttributeClips[this.m_nextAttribute].AttributeText_mc.Attribute_tf.text = this.m_AttributeText[this.m_nextAttribute];
-            this.m_AttributeClips[this.m_nextAttribute].gotoAndPlay("rollOn");
-            ++this.m_nextAttribute;
-            GlobalFunc.PlayMenuSound("UIFanfareLegendaryCrafted0" + this.m_nextAttribute);
+            _loc1_ = this.m_AttributeClips[this.m_NextAttribute];
+         }
+         return _loc1_;
+      }
+      
+      private function displayNextAttribute(param1:Event) : void
+      {
+         var currentAttributeClip:MovieClip = null;
+         var aEvent:Event = param1;
+         currentAttributeClip = this.getCurrentAttribute();
+         if(currentAttributeClip)
+         {
+            BSAsync.Await(currentAttributeClip,BSAsync.AWAIT_FRAME_LABEL,function():*
+            {
+               var _loc1_:int = m_IsLegendaryMod ? int(m_ShardStarCount - 1) : int(m_NextAttribute);
+               GlobalFunc.PlayMenuSound("UIFanfareLegendaryCrafted0" + _loc1_);
+               currentAttributeClip.AttributeText_mc.Attribute_tf.text = m_AttributeText[m_IsLegendaryMod ? 0 : _loc1_];
+               currentAttributeClip.AttributeEffect_mc.visible = m_IsLegendaryMod || checkStarCount(m_AttributeText[_loc1_]) > 0;
+               if(m_IsLegendaryMod)
+               {
+                  m_ShardStarCount = m_TopAttributeClips.length + 1;
+               }
+               else
+               {
+                  ++m_NextAttribute;
+               }
+            },"rollOn");
+            currentAttributeClip.gotoAndPlay("rollOn");
          }
          else
          {
             gotoAndPlay("rollOff");
-            removeEventListener(this.FANFARE_DISPLAYED,this.DisplayNextAttribute);
+            removeEventListener(this.FANFARE_DISPLAYED,this.displayNextAttribute);
          }
       }
       
-      private function ClearAnim() : void
+      private function clearAnim() : void
       {
          gotoAndStop("off");
          this.NewAnim_mc.gotoAndStop("off");

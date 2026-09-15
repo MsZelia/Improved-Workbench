@@ -3,13 +3,15 @@ package ExamineMenu_fla
    import flash.display.MovieClip;
    import flash.events.Event;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol361")]
-   public dynamic class Attribute2_47 extends MovieClip
+   [Embed(source="/_assets/assets.swf", symbol="symbol365")]
+   public dynamic class Attribute2_50 extends MovieClip
    {
+      
+      public var AttributeEffect_mc:MovieClip;
       
       public var AttributeText_mc:MovieClip;
       
-      public function Attribute2_47()
+      public function Attribute2_50()
       {
          super();
          addFrameScript(0,this.frame1,59,this.frame60,62,this.frame63);

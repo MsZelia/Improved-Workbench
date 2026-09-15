@@ -25,7 +25,7 @@ package ExamineMenu_fla
    import flash.utils.*;
    import flash.xml.*;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol430")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol435")]
    public dynamic class ModsBase_26 extends MovieClip
    {
       

@@ -25,7 +25,7 @@ package ExamineMenu_fla
    import flash.utils.*;
    import flash.xml.*;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol400")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol405")]
    public dynamic class VaultBoySafeRectGroup_3 extends MovieClip
    {
       

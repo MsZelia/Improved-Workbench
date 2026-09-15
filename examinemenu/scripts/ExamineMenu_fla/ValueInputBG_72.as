@@ -1,15 +1,12 @@
 package ExamineMenu_fla
 {
    import flash.display.MovieClip;
-   import flash.text.TextField;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol100")]
-   public dynamic class DifferenceText_108 extends MovieClip
+   [Embed(source="/_assets/assets.swf", symbol="symbol337")]
+   public dynamic class ValueInputBG_72 extends MovieClip
    {
       
-      public var Difference_tf:TextField;
-      
-      public function DifferenceText_108()
+      public function ValueInputBG_72()
       {
          super();
          addFrameScript(0,this.frame1,1,this.frame2);

@@ -2,11 +2,11 @@ package ExamineMenu_fla
 {
    import flash.display.MovieClip;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol337")]
-   public dynamic class ValueInputBG_67 extends MovieClip
+   [Embed(source="/_assets/assets.swf", symbol="symbol82")]
+   public dynamic class SetBonusIcon_136 extends MovieClip
    {
       
-      public function ValueInputBG_67()
+      public function SetBonusIcon_136()
       {
          super();
          addFrameScript(0,this.frame1,1,this.frame2);

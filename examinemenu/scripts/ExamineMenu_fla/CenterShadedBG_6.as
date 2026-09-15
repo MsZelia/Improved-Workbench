@@ -2,7 +2,7 @@ package ExamineMenu_fla
 {
    import flash.display.MovieClip;
    
-   [Embed(source="/_assets/assets.swf", symbol="symbol411")]
+   [Embed(source="/_assets/assets.swf", symbol="symbol416")]
    public dynamic class CenterShadedBG_6 extends MovieClip
    {
       
