@@ -41,7 +41,7 @@ package
          {
             _loc3_ = param1.text;
          }
-         var _loc4_:* = GlobalFunc.BuildLegendaryStarsGlyphString(param1);
+         var _loc4_:* = GlobalFunc.BuildStarsGlyphString(param1);
          if(param1.text != undefined)
          {
             GlobalFunc.SetText(textField,param1.count > 1 ? _loc3_ + _loc4_ + " (" + param1.count + ")" : _loc3_ + _loc4_,true);

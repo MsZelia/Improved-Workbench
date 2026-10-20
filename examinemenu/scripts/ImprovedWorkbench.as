@@ -22,7 +22,7 @@ package
       
       private static const MAX_CRAFTABLE:uint = 255;
       
-      public static const VERSION:String = "1.9.5";
+      public static const VERSION:String = "1.9.6";
       
       public static const MOD_NAME:String = "ImprovedWorkbench";
       
@@ -341,7 +341,10 @@ package
                   if(regex.test(LastSelectedItem))
                   {
                      customQuantity = uint(_config.customCraftAmount.itemNames[configItemName]);
-                     this._examineMenu.displayError("SET CustomCraftQuantity for itemName(" + configItemName + "): " + LastSelectedCategory + " > " + LastSelectedItem + " : " + customQuantity);
+                     if(_config.customCraftAmount.debug)
+                     {
+                        this._examineMenu.displayError("SET CustomCraftQuantity for itemName(" + configItemName + "): " + LastSelectedCategory + " > " + LastSelectedItem + " : " + customQuantity);
+                     }
                      return customQuantity;
                   }
                }
@@ -351,11 +354,17 @@ package
                   if(regex.test(LastSelectedCategory))
                   {
                      customQuantity = uint(_config.customCraftAmount.categoryNames[configCatName]);
-                     this._examineMenu.displayError("SET CustomCraftQuantity for categoryName(" + configCatName + "): " + LastSelectedCategory + " > " + LastSelectedItem + " : " + customQuantity);
+                     if(_config.customCraftAmount.debug)
+                     {
+                        this._examineMenu.displayError("SET CustomCraftQuantity for categoryName(" + configCatName + "): " + LastSelectedCategory + " > " + LastSelectedItem + " : " + customQuantity);
+                     }
                      return customQuantity;
                   }
                }
-               this._examineMenu.displayError("CustomCraftQuantity NOT FOUND for: " + LastSelectedCategory + " > " + LastSelectedItem);
+               if(_config.customCraftAmount.debug)
+               {
+                  this._examineMenu.displayError("CustomCraftQuantity NOT FOUND for: " + LastSelectedCategory + " > " + LastSelectedItem);
+               }
             }
          }
          return DefaultCraftAmount;
