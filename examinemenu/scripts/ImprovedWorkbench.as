@@ -22,7 +22,7 @@ package
       
       private static const MAX_CRAFTABLE:uint = 255;
       
-      public static const VERSION:String = "1.9.6";
+      public static const VERSION:String = "1.9.7";
       
       public static const MOD_NAME:String = "ImprovedWorkbench";
       
@@ -630,145 +630,118 @@ package
       
       public function initUI() : void
       {
-         if(isUIinit || !Config || !Config.uiConfig || !Config.uiConfig.enabled)
+         var i:int;
+         var errorCode:String = "";
+         try
          {
-            _examineMenu.alpha = 1;
-            return;
-         }
-         isUIinit = true;
-         if(Boolean(Config.uiConfig.hideVignette))
-         {
-            if(getQualifiedClassName(_examineMenu.getChildAt(1)) == "flash.display::MovieClip")
+            if(isUIinit || !Config || !Config.uiConfig || !Config.uiConfig.enabled)
             {
-               _examineMenu.getChildAt(1).visible = false;
+               _examineMenu.alpha = 1;
+               return;
             }
-         }
-         if(Boolean(Config.uiConfig.hideBackground))
-         {
-            _examineMenu.CenterShadedBG_mc.visible = false;
-            _examineMenu.ItemCardContainer_mc.Background_mc.visible = false;
-         }
-         if(Boolean(Config.uiConfig.hideHeader))
-         {
-            _examineMenu.Header_mc.visible = false;
-         }
-         if(Config.uiConfig.ItemName)
-         {
-            var x:Number = parseNumber(Config.uiConfig.ItemName.x);
-            var y:Number = parseNumber(Config.uiConfig.ItemName.y);
-            var align:String = Config.uiConfig.ItemName.align;
-            _examineMenu.ItemName_tf.x += x;
-            _examineMenu.ItemName_tf.y += y;
-            setAlignment(_examineMenu.ItemName_tf,align);
-         }
-         if(Config.uiConfig.ItemDescription)
-         {
-            x = parseNumber(Config.uiConfig.ItemDescription.x);
-            y = parseNumber(Config.uiConfig.ItemDescription.y);
-            align = Config.uiConfig.ItemDescription.align;
-            _examineMenu.LegendaryItemDescription_tf.x += x;
-            _examineMenu.LegendaryItemDescription_tf.y += y;
-            setAlignment(_examineMenu.LegendaryItemDescription_tf,align);
-         }
-         if(Config.uiConfig.ItemCard)
-         {
-            x = parseNumber(Config.uiConfig.ItemCard.x);
-            y = parseNumber(Config.uiConfig.ItemCard.y);
-            _examineMenu.ItemCardContainer_mc.x += x;
-            _examineMenu.ItemCardContainer_mc.y += y;
-         }
-         if(Config.uiConfig.Inventory)
-         {
-            x = parseNumber(Config.uiConfig.Inventory.x);
-            y = parseNumber(Config.uiConfig.Inventory.y);
-            _examineMenu.InventoryBase_mc.x += x;
-            _examineMenu.InventoryBase_mc.y += y;
-         }
-         if(Config.uiConfig.CraftingHierarchy)
-         {
-            x = parseNumber(Config.uiConfig.CraftingHierarchy.x);
-            y = parseNumber(Config.uiConfig.CraftingHierarchy.y);
-            _examineMenu.CraftingHeirarchy_mc.x += x;
-            _examineMenu.CraftingHeirarchy_mc.y += y;
-         }
-         if(Config.uiConfig.KnownMods)
-         {
-            x = parseNumber(Config.uiConfig.KnownMods.x);
-            y = parseNumber(Config.uiConfig.KnownMods.y);
-            _examineMenu.KnownModsInfo_mc.x += x;
-            _examineMenu.KnownModsInfo_mc.y += y;
-         }
-         if(Config.uiConfig.ModDescription)
-         {
-            x = parseNumber(Config.uiConfig.ModDescription.x);
-            y = parseNumber(Config.uiConfig.ModDescription.y);
-            _examineMenu.ModDescriptionBase_mc.x += x;
-            _examineMenu.ModDescriptionBase_mc.y += y;
-         }
-         if(Config.uiConfig.Mods)
-         {
-            x = parseNumber(Config.uiConfig.Mods.x);
-            y = parseNumber(Config.uiConfig.Mods.y);
-            _examineMenu.CurrentModsBase_mc.x += x;
-            _examineMenu.CurrentModsBase_mc.y += y;
-            _examineMenu.ModSlotBase_mc.x += x;
-            _examineMenu.ModSlotBase_mc.y += y;
-         }
-         if(Config.uiConfig.PerksLabel)
-         {
-            x = parseNumber(Config.uiConfig.PerksLabel.x);
-            y = parseNumber(Config.uiConfig.PerksLabel.y);
-            _examineMenu.perkPanelLabel_mc.x += x;
-            _examineMenu.perkPanelLabel_mc.y += y;
-         }
-         if(Config.uiConfig.PerksPanel1)
-         {
-            x = parseNumber(Config.uiConfig.PerksPanel1.x);
-            y = parseNumber(Config.uiConfig.PerksPanel1.y);
-            _examineMenu.PerkPanel0_mc.x += x;
-            _examineMenu.PerkPanel0_mc.y += y;
-         }
-         if(Config.uiConfig.PerksPanel2)
-         {
-            x = parseNumber(Config.uiConfig.PerksPanel2.x);
-            y = parseNumber(Config.uiConfig.PerksPanel2.y);
-            _examineMenu.PerkPanel1_mc.x += x;
-            _examineMenu.PerkPanel1_mc.y += y;
-         }
-         _examineMenu.alpha = 1;
-         _examineMenu.ItemName_tf.alpha = 1;
-         _examineMenu.LegendaryItemDescription_tf.alpha = 1;
-         _examineMenu.ItemCardContainer_mc.alpha = 1;
-         _examineMenu.InventoryBase_mc.alpha = 1;
-         _examineMenu.CraftingHeirarchy_mc.alpha = 1;
-         _examineMenu.ModDescriptionBase_mc.alpha = 1;
-         _examineMenu.KnownModsInfo_mc.alpha = 1;
-         _examineMenu.CurrentModsBase_mc.alpha = 1;
-         _examineMenu.ModSlotBase_mc.alpha = 1;
-         _examineMenu.perkPanelLabel_mc.alpha = 1;
-         _examineMenu.PerkPanel0_mc.alpha = 1;
-         _examineMenu.PerkPanel1_mc.alpha = 1;
-         _examineMenu.displayError("UI Config initialized!");
-         if(Config.debugChildren)
-         {
-            var i:int = 0;
-            while(i < _examineMenu.numChildren)
+            isUIinit = true;
+            errorCode = "hideVignette";
+            if(Boolean(Config.uiConfig.hideVignette))
             {
-               _examineMenu.displayError(i + ":" + getQualifiedClassName(_examineMenu.getChildAt(i)));
-               if(i == Config.uiConfig.testId)
+               if(getQualifiedClassName(_examineMenu.getChildAt(1)) == "flash.display::MovieClip")
                {
-                  if(_examineMenu.getChildAt(i).visible != null && _examineMenu.getChildAt(i).visible != undefined)
-                  {
-                     _examineMenu.getChildAt(i).visible = false;
-                     _examineMenu.displayError("alpha set");
-                  }
-                  else
-                  {
-                     _examineMenu.displayError("alpha not set");
-                  }
+                  _examineMenu.getChildAt(1).visible = false;
                }
-               i++;
             }
+            errorCode = "hideBackground";
+            if(Boolean(Config.uiConfig.hideBackground))
+            {
+               _examineMenu.CenterShadedBG_mc.visible = false;
+               _examineMenu.ItemCardContainer_mc.Background_mc.visible = false;
+            }
+            errorCode = "hideHeader";
+            if(Boolean(Config.uiConfig.hideHeader))
+            {
+               _examineMenu.Header_mc.visible = false;
+            }
+            errorCode = "ItemName";
+            if(Config.uiConfig.ItemName)
+            {
+               applyUIChanges(_examineMenu.ItemName_tf,Config.uiConfig.ItemName);
+            }
+            errorCode = "ItemDescription";
+            if(Config.uiConfig.ItemDescription)
+            {
+               applyUIChanges(_examineMenu.LegendaryItemDescription_tf,Config.uiConfig.ItemDescription);
+            }
+            errorCode = "ItemCard";
+            if(Config.uiConfig.ItemCard)
+            {
+               applyUIChanges(_examineMenu.ItemCardContainer_mc,Config.uiConfig.ItemCard);
+            }
+            errorCode = "Inventory";
+            if(Config.uiConfig.Inventory)
+            {
+               applyUIChanges(_examineMenu.InventoryBase_mc,Config.uiConfig.Inventory);
+            }
+            errorCode = "CraftingHierarchy";
+            if(Config.uiConfig.CraftingHierarchy)
+            {
+               applyUIChanges(_examineMenu.CraftingHeirarchy_mc,Config.uiConfig.CraftingHierarchy);
+            }
+            errorCode = "KnownMods";
+            if(Config.uiConfig.KnownMods)
+            {
+               applyUIChanges(_examineMenu.KnownModsInfo_mc,Config.uiConfig.KnownMods);
+            }
+            errorCode = "ModDescription";
+            if(Config.uiConfig.ModDescription)
+            {
+               applyUIChanges(_examineMenu.ModDescriptionBase_mc,Config.uiConfig.ModDescription);
+            }
+            errorCode = "Mods";
+            if(Config.uiConfig.Mods)
+            {
+               applyUIChanges(_examineMenu.CurrentModsBase_mc,Config.uiConfig.Mods);
+               applyUIChanges(_examineMenu.ModSlotBase_mc,Config.uiConfig.Mods);
+            }
+            errorCode = "PerksLabel";
+            if(Config.uiConfig.PerksLabel)
+            {
+               applyUIChanges(_examineMenu.perkPanelLabel_mc,Config.uiConfig.PerksLabel);
+            }
+            errorCode = "PerksPanel1";
+            if(Config.uiConfig.PerksPanel1)
+            {
+               applyUIChanges(_examineMenu.PerkPanel0_mc,Config.uiConfig.PerksPanel1);
+            }
+            errorCode = "PerksPanel2";
+            if(Config.uiConfig.PerksPanel2)
+            {
+               applyUIChanges(_examineMenu.PerkPanel1_mc,Config.uiConfig.PerksPanel2);
+            }
+            _examineMenu.alpha = 1;
+            _examineMenu.displayError("UI Config initialized!");
+            if(Config.debugChildren)
+            {
+               i = 0;
+               while(i < _examineMenu.numChildren)
+               {
+                  _examineMenu.displayError(i + ":" + getQualifiedClassName(_examineMenu.getChildAt(i)));
+                  if(i == Config.uiConfig.testId)
+                  {
+                     if(_examineMenu.getChildAt(i).visible != null && _examineMenu.getChildAt(i).visible != undefined)
+                     {
+                        _examineMenu.getChildAt(i).visible = false;
+                        _examineMenu.displayError("alpha set");
+                     }
+                     else
+                     {
+                        _examineMenu.displayError("alpha not set");
+                     }
+                  }
+                  i++;
+               }
+            }
+         }
+         catch(e:*)
+         {
+            _examineMenu.displayError("initUI error (" + errorCode + "): " + e);
          }
       }
       
@@ -877,6 +850,21 @@ package
                obj.defaultTextFormat = textFormat;
                obj.setTextFormat(textFormat);
             }
+         }
+      }
+      
+      private function applyUIChanges(obj:*, cfg:Object) : void
+      {
+         if(obj != null)
+         {
+            obj.x += parseNumber(cfg.x);
+            obj.y += parseNumber(cfg.y);
+            if(obj is TextField)
+            {
+               obj.width += parseNumber(cfg.width);
+               setAlignment(obj,cfg.align);
+            }
+            obj.alpha = 1;
          }
       }
       
